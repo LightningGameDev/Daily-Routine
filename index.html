@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Routine — Editable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F6F3EA;
+    --pitch: #1F7A4D;
+    --pitch-deep: #155A3B;
+    --gold: #C8922A;
+    --gold-deep: #8A611C;
+    --sky: #2F5D8C;
+    --ink: #1C2420;
+    --line: rgba(28, 36, 32, 0.15);
+    --rest: rgba(28, 36, 32, 0.55);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    font-family: 'Inter', 'Helvetica Neue', sans-serif;
+    background: #ddd8c8;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  button, input { font-family: inherit; color: inherit; }
+
+  .app {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 28px 18px 60px;
+  }
+
+  .app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .eyebrow {
+    font-family: 'Oswald', Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(28, 36, 32, 0.5);
+    margin-bottom: 2px;
+  }
+
+  h1 {
+    font-family: 'Oswald', Arial, sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+  }
+
+  .today-date {
+    font-size: 13px;
+    color: rgba(28, 36, 32, 0.55);
+    padding-bottom: 4px;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+
+  .tab {
+    border: none;
+    cursor: pointer;
+    padding: 9px 16px;
+    border-radius: 30px;
+    font-family: 'Oswald', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    background: rgba(28, 36, 32, 0.06);
+    color: rgba(28, 36, 32, 0.55);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .tab.today::after {
+    content: "";
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    margin-left: 7px;
+    vertical-align: middle;
+    opacity: 0.7;
+  }
+
+  .tab[data-type="school"].active { background: rgba(47, 93, 140, 0.16); color: var(--sky); }
+  .tab[data-type="training"].active { background: rgba(31, 122, 77, 0.16); color: var(--pitch-deep); }
+  .tab[data-type="matchday"].active { background: rgba(200, 146, 42, 0.22); color: var(--gold-deep); }
+  .tab[data-type="rest"].active { background: rgba(28, 36, 32, 0.12); color: var(--ink); }
+
+  /* Sheet */
+  .sheet {
+    background: white;
+    border-top: 8px solid var(--pitch);
+    border-radius: 4px;
+    padding: 22px 20px 18px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .sheet.type-matchday { border-top-color: var(--gold); }
+
+  .sheet-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 14px;
+  }
+
+  .badge-input {
+    font-family: 'Oswald', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-align: right;
+    border: none;
+    border-radius: 30px;
+    padding: 7px 16px;
+    background: rgba(28, 36, 32, 0.06);
+    color: rgba(28, 36, 32, 0.65);
+    width: 100%;
+    max-width: 260px;
+  }
+
+  .badge-input:focus { outline: 2px solid var(--line); background: rgba(28,36,32,0.09); }
+
+  .kickoff-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    background: rgba(200, 146, 42, 0.08);
+    border: 2px dashed var(--gold);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+
+  .kickoff-field { flex: 1; min-width: 140px; }
+
+  .kickoff-field label {
+    display: block;
+    font-family: 'Oswald', Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    margin-bottom: 3px;
+  }
+
+  .kickoff-field input {
+    width: 100%;
+    border: none;
+    border-bottom: 2px dotted rgba(200, 146, 42, 0.5);
+    background: transparent;
+    font-family: 'Oswald', Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gold-deep);
+    padding: 2px 0;
+  }
+
+  .kickoff-field input:focus { outline: none; border-bottom-color: var(--gold); }
+
+  /* Blocks */
+  .blocks { display: flex; flex-direction: column; gap: 4px; }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 8px;
+    border-left: 5px solid var(--line);
+    border-radius: 3px;
+    flex-wrap: wrap;
+  }
+
+  .row:nth-child(even) { background: rgba(28, 36, 32, 0.025); }
+
+  .row.style-train { border-left-color: var(--pitch); }
+  .row.style-school { border-left-color: var(--sky); }
+  .row.style-game { border-left-color: var(--gold); }
+  .row.style-bed { border-left-color: rgba(28, 36, 32, 0.4); }
+
+  .row.note-row { border-left-style: dashed; border-left-color: rgba(28,36,32,0.3); }
+
+  .row-move {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    flex-shrink: 0;
+  }
+
+  .icon-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: rgba(28, 36, 32, 0.4);
+    font-size: 10px;
+    line-height: 1;
+    padding: 3px 4px;
+    border-radius: 3px;
+  }
+
+  .icon-btn:hover { background: rgba(28,36,32,0.08); color: var(--ink); }
+  .icon-btn:disabled { opacity: 0.25; cursor: default; }
+  .icon-btn:disabled:hover { background: transparent; }
+
+  .row-fields {
+    display: flex;
+    gap: 10px;
+    flex: 1 1 260px;
+    min-width: 0;
+  }
+
+  .time-input {
+    flex: 0 0 150px;
+    border: none;
+    background: transparent;
+    font-variant-numeric: tabular-nums;
+    font-size: 12.5px;
+    font-weight: 600;
+    font-family: 'Oswald', Arial, sans-serif;
+    color: rgba(28, 36, 32, 0.6);
+    padding: 5px 4px;
+    border-bottom: 1px solid transparent;
+    min-width: 0;
+  }
+
+  .label-input {
+    flex: 1 1 auto;
+    border: none;
+    background: transparent;
+    font-size: 13.5px;
+    color: var(--ink);
+    padding: 5px 4px;
+    border-bottom: 1px solid transparent;
+    min-width: 0;
+  }
+
+  .note-input {
+    flex: 1 1 auto;
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    font-style: italic;
+    color: rgba(28, 36, 32, 0.65);
+    padding: 5px 4px;
+    border-bottom: 1px solid transparent;
+    min-width: 0;
+  }
+
+  .time-input:focus, .label-input:focus, .note-input:focus {
+    outline: none;
+    border-bottom-color: var(--line);
+    background: rgba(28,36,32,0.03);
+  }
+
+  .row.style-bed .label-input { font-weight: 700; }
+  .label-input.emph { font-weight: 700; font-size: 14.5px; }
+
+  .row-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .style-dots { display: flex; gap: 5px; }
+
+  .dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    outline-offset: 2px;
+  }
+
+  .dot-train { background: var(--pitch); }
+  .dot-school { background: var(--sky); }
+  .dot-game { background: var(--gold); }
+  .dot-bed { background: rgba(28, 36, 32, 0.4); }
+  .dot.active { outline: 2px solid var(--ink); }
+
+  .big-toggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: rgba(28, 36, 32, 0.55);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .big-toggle input { cursor: pointer; }
+
+  .delete-btn { font-size: 16px; color: rgba(28,36,32,0.35); }
+  .delete-btn:hover { color: #b23b3b; background: rgba(178,59,59,0.08); }
+
+  .add-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Oswald', Arial, sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    border-radius: 6px;
+    padding: 9px 14px;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn.ghost {
+    background: rgba(28, 36, 32, 0.05);
+    color: rgba(28, 36, 32, 0.7);
+  }
+  .btn.ghost:hover { background: rgba(28, 36, 32, 0.09); }
+
+  .btn.subtle {
+    background: transparent;
+    color: rgba(28, 36, 32, 0.55);
+    border: 1px solid var(--line);
+  }
+  .btn.subtle:hover { background: rgba(28,36,32,0.04); }
+
+  .btn.danger { background: #b23b3b; color: white; }
+  .btn.danger:hover { background: #9a3232; }
+
+  /* Footer */
+  .app-footer {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+
+  .confirm-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: rgba(28,36,32,0.7);
+    flex-wrap: wrap;
+  }
+
+  .status {
+    font-size: 12px;
+    color: rgba(28, 36, 32, 0.4);
+    margin-left: auto;
+  }
+
+  .loading-note {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(28,36,32,0.5);
+    font-size: 14px;
+  }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 24px; }
+    .row { align-items: flex-start; }
+    .row-fields { flex-direction: column; gap: 2px; }
+    .time-input { flex: none; width: 100%; }
+    .row-controls { width: 100%; justify-content: space-between; padding-left: 26px; }
+    .status { margin-left: 0; width: 100%; order: 10; }
+  }
+
+  @media print {
+    html, body { background: white; }
+    .tabs, .add-row, .app-footer, .row-move, .style-dots, .big-toggle, .delete-btn {
+      display: none !important;
+    }
+    .app { max-width: 100%; padding: 0; }
+    .sheet { box-shadow: none; }
+    .badge-input, .kickoff-field input, .time-input, .label-input, .note-input {
+      border: none !important;
+      background: transparent !important;
+    }
+    .row-controls { display: none !important; }
+    .row { padding-left: 12px; }
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Daily Routine</p>
+        <h1 id="dayTitle">School Day</h1>
+      </div>
+      <p class="today-date" id="todayDate"></p>
+    </header>
+
+    <nav class="tabs" id="tabs"></nav>
+
+    <main id="sheetContainer">
+      <p class="loading-note">Loading your schedule…</p>
+    </main>
+
+    <footer class="app-footer" id="appFooter" hidden>
+      <div id="resetArea"></div>
+      <button class="btn subtle" id="printBtn">Print this day</button>
+      <span class="status" id="statusText">Autosaves as you go</span>
+    </footer>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  var DAY_META = {
+    school:   { name: "School Day",    accent: "school",   defaultBadge: "Mon / no evening training" },
+    training: { name: "Team Training", accent: "training",  defaultBadge: "Tue – Fri / Sat (no game)" },
+    matchday: { name: "Matchday",      accent: "matchday",  defaultBadge: "Usually Saturday" },
+    rest:     { name: "Rest Day",      accent: "rest",      defaultBadge: "Sunday" }
+  };
+
+  var TYPE_ORDER = ["school", "training", "matchday", "rest"];
+
+  function blk(time, label, style, big) {
+    return { type: "block", time: time, label: label, style: style, big: !!big };
+  }
+  function note(text) {
+    return { type: "note", text: text };
+  }
+
+  function defaults() {
+    return {
+      school: {
+        badge: "Mon / no evening training",
+        blocks: [
+          blk("5:45 – 5:50 AM", "Wake up & get ready", "train"),
+          blk("5:50 – 6:00 AM", "Travel to the pitch", "train"),
+          blk("6:00 – 6:45 AM", "Technical session", "train", true),
+          blk("6:45 – 6:48 AM", "Put football stuff away", "train"),
+          blk("6:48 – 6:58 AM", "Shower", "train"),
+          blk("6:58 – 7:08 AM", "Breakfast", "train"),
+          blk("7:08 – 7:11 AM", "Pack up", "train"),
+          blk("7:11 – 7:30 AM", "Free time", "train"),
+          blk("7:30 AM – 4:00 PM", "School", "school"),
+          blk("4:00 – 5:00 PM", "Snack & downtime", "school"),
+          blk("5:00 – 6:00 PM", "Homework", "school"),
+          blk("6:00 – 8:10 PM", "Free time / hobbies", "train"),
+          blk("8:10 – 8:15 PM", "Quick rinse", "train"),
+          blk("8:15 – 8:30 PM", "Put football stuff away & clean room", "train"),
+          blk("8:30 – 9:15 PM", "Dinner", "train"),
+          blk("9:15 – 9:30 PM", "Read bible & pray", "train"),
+          blk("9:30 PM", "Bedtime", "bed")
+        ]
+      },
+      training: {
+        badge: "Tue – Fri / Sat (no game)",
+        blocks: [
+          blk("5:45 – 5:50 AM", "Wake up & get ready", "train"),
+          blk("5:50 – 6:00 AM", "Travel to the pitch", "train"),
+          blk("6:00 – 6:45 AM", "Technical session", "train", true),
+          blk("6:45 – 6:48 AM", "Put football stuff away", "train"),
+          blk("6:48 – 6:58 AM", "Shower", "train"),
+          blk("6:58 – 7:08 AM", "Breakfast", "train"),
+          blk("7:08 – 7:11 AM", "Pack up", "train"),
+          blk("7:11 – 7:30 AM", "Free time", "train"),
+          blk("7:30 AM – 4:00 PM", "School", "school"),
+          blk("4:00 – 5:45 PM", "Snack & homework", "school"),
+          blk("5:45 – 6:45 PM", "Dinner", "train"),
+          blk("6:45 – 7:00 PM", "Get ready & catch the bus", "train"),
+          blk("Tue 7:45 / Wed–Fri 7:30 PM", "Team training (~90 min)", "train", true),
+          blk("By 9:30 PM", "Home", "train"),
+          blk("9:30 – 9:33 PM", "Quick rinse", "train"),
+          blk("9:33 – 9:38 PM", "Put football stuff away & clean room", "train"),
+          blk("9:38 – 9:50 PM", "Dinner", "train"),
+          blk("9:50 – 9:55 PM", "Read bible & pray", "train"),
+          blk("9:55 PM", "Bedtime", "bed")
+        ]
+      },
+      matchday: {
+        badge: "Usually Saturday",
+        kickoff: "",
+        opponent: "",
+        blocks: [
+          blk("6:45 – 6:50 AM", "Wake up & get ready", "train"),
+          blk("6:50 – 7:00 AM", "Travel to the pitch", "train"),
+          blk("7:00 – 7:30 AM", "Barefoot juggling", "train", true),
+          note("Rest of morning — Home, rest"),
+          blk("~3 hrs before kick-off", "Light pre-match meal & relax", "train"),
+          blk("2 hrs before kick-off", "Kit on & travel to the pitch", "game"),
+          blk("90 min before kick-off", "Warm-up & team prep", "game"),
+          blk("Kick-off (~90 min)", "Match", "game", true),
+          blk("~20 min after", "Post-match recovery", "train"),
+          blk("then", "Quick rinse", "train"),
+          blk("then", "Put football stuff away & clean room", "train"),
+          blk("then", "Dinner", "train"),
+          blk("then", "Read bible & pray", "train"),
+          blk("~9:30 PM (or ASAP after)", "Bedtime", "bed")
+        ]
+      },
+      rest: {
+        badge: "Sunday",
+        blocks: [
+          blk("6:45 – 6:50 AM", "Wake up & get ready", "train"),
+          blk("6:50 – 7:00 AM", "Travel to the pitch", "train"),
+          blk("7:00 – 7:30 AM", "Barefoot juggling", "train", true),
+          note("Rest of morning — Home, rest"),
+          blk("1:00 – 1:30 PM", "Technical session", "train", true),
+          blk("1:30 – 2:30 PM", "Code", "train"),
+          blk("2:30 – 3:00 PM", "Laundry", "train"),
+          blk("3:00 – 3:30 PM", "Get ready for the week (kit, bag, clothes)", "train"),
+          note("Rest of afternoon — Free time"),
+          blk("8:10 – 8:15 PM", "Quick rinse", "train"),
+          blk("8:15 – 8:30 PM", "Put football stuff away & clean room", "train"),
+          blk("8:30 – 9:15 PM", "Dinner", "train"),
+          blk("9:15 – 9:30 PM", "Read bible & pray", "train"),
+          blk("9:30 PM", "Bedtime", "bed")
+        ]
+      }
+    };
+  }
+
+  function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
+
+  function suggestType(date) {
+    var day = date.getDay(); // 0 Sun ... 6 Sat
+    if (day === 0) return "rest";
+    if (day === 1) return "school";
+    if (day >= 2 && day <= 6) return "training";
+    return "school";
+  }
+
+  var state = {
+    active: "school",
+    data: {}
+  };
+
+  var saveTimers = {};
+  var statusEl, footerEl, resetAreaEl, sheetContainerEl, tabsEl, dayTitleEl;
+
+  function setStatus(text) { if (statusEl) statusEl.textContent = text; }
+
+  function storageKey(type) { return "schedule:" + type; }
+
+  var storage = {
+    get: function (key) {
+      return new Promise(function (resolve) {
+        try {
+          var val = localStorage.getItem(key);
+          resolve(val === null ? null : { key: key, value: val });
+        } catch (e) { resolve(null); }
+      });
+    },
+    set: function (key, value) {
+      return new Promise(function (resolve) {
+        try {
+          localStorage.setItem(key, value);
+          resolve({ key: key, value: value });
+        } catch (e) { resolve(null); }
+      });
+    }
+  };
+
+  function loadType(type) {
+    return storage.get(storageKey(type)).then(function (res) {
+      if (res && res.value) {
+        try { return JSON.parse(res.value); } catch (e) { return clone(defaults()[type]); }
+      }
+      return clone(defaults()[type]);
+    }).catch(function () {
+      return clone(defaults()[type]);
+    });
+  }
+
+  function loadAll() {
+    var d = defaults();
+    var promises = TYPE_ORDER.map(function (type) {
+      return loadType(type).then(function (val) { state.data[type] = val; });
+    });
+    return Promise.all(promises);
+  }
+
+  function scheduleSave(type) {
+    setStatus("Saving…");
+    clearTimeout(saveTimers[type]);
+    saveTimers[type] = setTimeout(function () { doSave(type); }, 700);
+  }
+
+  function doSave(type) {
+    var payload = JSON.stringify(state.data[type]);
+    storage.set(storageKey(type), payload).then(function (res) {
+      if (res) { setStatus("Saved ✓"); } else { setStatus("Couldn't save — try again"); }
+    }).catch(function () {
+      setStatus("Couldn't save — try again");
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function renderTabs() {
+    var today = suggestType(new Date());
+    var html = TYPE_ORDER.map(function (type) {
+      var meta = DAY_META[type];
+      var cls = "tab" + (type === state.active ? " active" : "") + (type === today ? " today" : "");
+      return '<button class="' + cls + '" data-type="' + type + '" title="' +
+        (type === today ? "Today usually looks like this" : "") + '">' + meta.name + "</button>";
+    }).join("");
+    tabsEl.innerHTML = html;
+    Array.prototype.forEach.call(tabsEl.querySelectorAll(".tab"), function (b) {
+      b.addEventListener("click", function () {
+        state.active = b.getAttribute("data-type");
+        renderTabs();
+        renderSheet();
+      });
+    });
+  }
+
+  function rowHtml(item, i, total) {
+    var upDis = i === 0 ? "disabled" : "";
+    var downDis = i === total - 1 ? "disabled" : "";
+    var moveBtns =
+      '<div class="row-move">' +
+        '<button class="icon-btn" data-action="up" ' + upDis + ' aria-label="Move up">▲</button>' +
+        '<button class="icon-btn" data-action="down" ' + downDis + ' aria-label="Move down">▼</button>' +
+      "</div>";
+
+    if (item.type === "note") {
+      return (
+        '<div class="row note-row" data-index="' + i + '">' +
+          moveBtns +
+          '<input class="note-input" data-field="text" value="' + escapeHtml(item.text) +
+            '" aria-label="Note" placeholder="A short note, e.g. Free time">' +
+          '<button class="icon-btn delete-btn" data-action="delete" aria-label="Delete note">×</button>' +
+        "</div>"
+      );
+    }
+
+    var dots = ["train", "school", "game", "bed"].map(function (s) {
+      var labelMap = { train: "Training", school: "School", game: "Match", bed: "Bedtime" };
+      return '<button class="dot dot-' + s + (item.style === s ? " active" : "") +
+        '" data-style="' + s + '" title="' + labelMap[s] + '" aria-label="' + labelMap[s] + '"></button>';
+    }).join("");
+
+    return (
+      '<div class="row style-' + item.style + '" data-index="' + i + '">' +
+        moveBtns +
+        '<div class="row-fields">' +
+          '<input class="time-input" data-field="time" value="' + escapeHtml(item.time) +
+            '" aria-label="Time" placeholder="e.g. 3:00 – 3:30 PM">' +
+          '<input class="label-input' + (item.big ? " emph" : "") + '" data-field="label" value="' + escapeHtml(item.label) +
+            '" aria-label="What\'s happening" placeholder="What\'s happening">' +
+        "</div>" +
+        '<div class="row-controls">' +
+          '<div class="style-dots" role="group" aria-label="Category">' + dots + "</div>" +
+          '<label class="big-toggle"><input type="checkbox" data-field="big"' +
+            (item.big ? " checked" : "") + "> Emphasize</label>" +
+          '<button class="icon-btn delete-btn" data-action="delete" aria-label="Delete block">×</button>' +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  function renderBlocks() {
+    var day = state.data[state.active];
+    var container = sheetContainerEl.querySelector("#blocksList");
+    if (!container) return;
+    container.innerHTML = day.blocks.map(function (item, i) {
+      return rowHtml(item, i, day.blocks.length);
+    }).join("");
+    bindBlockEvents();
+  }
+
+  function bindBlockEvents() {
+    var container = sheetContainerEl.querySelector("#blocksList");
+    var day = state.data[state.active];
+
+    Array.prototype.forEach.call(container.querySelectorAll(".row"), function (rowEl) {
+      var idx = parseInt(rowEl.getAttribute("data-index"), 10);
+
+      Array.prototype.forEach.call(rowEl.querySelectorAll("input[data-field]"), function (inputEl) {
+        var field = inputEl.getAttribute("data-field");
+        if (field === "big") {
+          inputEl.addEventListener("change", function () {
+            day.blocks[idx].big = inputEl.checked;
+            var labelInput = rowEl.querySelector(".label-input");
+            if (labelInput) labelInput.classList.toggle("emph", inputEl.checked);
+            scheduleSave(state.active);
+          });
+        } else {
+          inputEl.addEventListener("input", function () {
+            day.blocks[idx][field] = inputEl.value;
+            scheduleSave(state.active);
+          });
+        }
+      });
+
+      Array.prototype.forEach.call(rowEl.querySelectorAll(".dot"), function (dotEl) {
+        dotEl.addEventListener("click", function () {
+          day.blocks[idx].style = dotEl.getAttribute("data-style");
+          renderBlocks();
+          scheduleSave(state.active);
+        });
+      });
+
+      var upBtn = rowEl.querySelector('[data-action="up"]');
+      var downBtn = rowEl.querySelector('[data-action="down"]');
+      var delBtn = rowEl.querySelector('[data-action="delete"]');
+
+      if (upBtn) upBtn.addEventListener("click", function () {
+        if (idx === 0) return;
+        var tmp = day.blocks[idx - 1];
+        day.blocks[idx - 1] = day.blocks[idx];
+        day.blocks[idx] = tmp;
+        renderBlocks();
+        scheduleSave(state.active);
+      });
+
+      if (downBtn) downBtn.addEventListener("click", function () {
+        if (idx === day.blocks.length - 1) return;
+        var tmp2 = day.blocks[idx + 1];
+        day.blocks[idx + 1] = day.blocks[idx];
+        day.blocks[idx] = tmp2;
+        renderBlocks();
+        scheduleSave(state.active);
+      });
+
+      if (delBtn) delBtn.addEventListener("click", function () {
+        day.blocks.splice(idx, 1);
+        renderBlocks();
+        scheduleSave(state.active);
+      });
+    });
+  }
+
+  function renderSheet() {
+    var type = state.active;
+    var meta = DAY_META[type];
+    var day = state.data[type];
+
+    dayTitleEl.textContent = meta.name;
+
+    var kickoffHtml = "";
+    if (type === "matchday") {
+      kickoffHtml =
+        '<div class="kickoff-row">' +
+          '<div class="kickoff-field"><label>Kick-off</label>' +
+            '<input id="kickoffInput" value="' + escapeHtml(day.kickoff || "") + '" placeholder="e.g. 3:00 PM"></div>' +
+          '<div class="kickoff-field"><label>Opponent</label>' +
+            '<input id="opponentInput" value="' + escapeHtml(day.opponent || "") + '" placeholder="e.g. St. George\'s"></div>' +
+        "</div>";
+    }
+
+    sheetContainerEl.innerHTML =
+      '<div class="sheet type-' + type + '">' +
+        '<div class="sheet-header">' +
+          '<input class="badge-input" id="badgeInput" value="' + escapeHtml(day.badge || "") + '" aria-label="Day note">' +
+        "</div>" +
+        kickoffHtml +
+        '<div class="blocks" id="blocksList"></div>' +
+        '<div class="add-row">' +
+          '<button class="btn ghost" id="addBlockBtn">+ Add block</button>' +
+          '<button class="btn ghost" id="addNoteBtn">+ Add note</button>' +
+        "</div>" +
+      "</div>";
+
+    renderBlocks();
+
+    var badgeInput = sheetContainerEl.querySelector("#badgeInput");
+    badgeInput.addEventListener("input", function () {
+      day.badge = badgeInput.value;
+      scheduleSave(type);
+    });
+
+    if (type === "matchday") {
+      var kickoffInput = sheetContainerEl.querySelector("#kickoffInput");
+      var opponentInput = sheetContainerEl.querySelector("#opponentInput");
+      kickoffInput.addEventListener("input", function () {
+        day.kickoff = kickoffInput.value;
+        scheduleSave(type);
+      });
+      opponentInput.addEventListener("input", function () {
+        day.opponent = opponentInput.value;
+        scheduleSave(type);
+      });
+    }
+
+    sheetContainerEl.querySelector("#addBlockBtn").addEventListener("click", function () {
+      day.blocks.push(blk("", "", "train", false));
+      renderBlocks();
+      scheduleSave(type);
+      focusLastLabel();
+    });
+
+    sheetContainerEl.querySelector("#addNoteBtn").addEventListener("click", function () {
+      day.blocks.push(note(""));
+      renderBlocks();
+      scheduleSave(type);
+      focusLastLabel();
+    });
+
+    renderResetArea();
+    footerEl.hidden = false;
+  }
+
+  function focusLastLabel() {
+    var rows = sheetContainerEl.querySelectorAll(".row");
+    if (!rows.length) return;
+    var last = rows[rows.length - 1];
+    var field = last.querySelector(".label-input, .note-input");
+    if (field) field.focus();
+    last.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function renderResetArea() {
+    resetAreaEl.innerHTML = '<button class="btn subtle" id="resetBtn">Reset to default</button>';
+    resetAreaEl.querySelector("#resetBtn").addEventListener("click", function () {
+      var type = state.active;
+      resetAreaEl.innerHTML =
+        '<div class="confirm-box">Reset ' + DAY_META[type].name + ' to its original plan?' +
+          '<button class="btn danger" id="confirmResetBtn">Yes, reset</button>' +
+          '<button class="btn ghost" id="cancelResetBtn">Cancel</button>' +
+        "</div>";
+      resetAreaEl.querySelector("#confirmResetBtn").addEventListener("click", function () {
+        state.data[type] = clone(defaults()[type]);
+        renderSheet();
+        scheduleSave(type);
+      });
+      resetAreaEl.querySelector("#cancelResetBtn").addEventListener("click", renderResetArea);
+    });
+  }
+
+  function init() {
+    statusEl = document.getElementById("statusText");
+    footerEl = document.getElementById("appFooter");
+    resetAreaEl = document.getElementById("resetArea");
+    sheetContainerEl = document.getElementById("sheetContainer");
+    tabsEl = document.getElementById("tabs");
+    dayTitleEl = document.getElementById("dayTitle");
+
+    document.getElementById("todayDate").textContent = new Date().toLocaleDateString(undefined, {
+      weekday: "long", month: "short", day: "numeric"
+    });
+
+    document.getElementById("printBtn").addEventListener("click", function () { window.print(); });
+
+    loadAll().then(function () {
+      state.active = suggestType(new Date());
+      renderTabs();
+      renderSheet();
+    }).catch(function () {
+      state.data = defaults();
+      state.active = suggestType(new Date());
+      renderTabs();
+      renderSheet();
+      setStatus("Couldn't load saved changes — showing defaults");
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+</script>
+</body>
+</html>
