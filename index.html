@@ -443,6 +443,71 @@
     margin-top: 8px;
   }
 
+  /* Read-only saved week view */
+  .week-view-section { margin-bottom: 20px; }
+
+  .wv-day {
+    background: white;
+    border-radius: 6px;
+    border-left: 6px solid var(--line);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  }
+
+  .wv-day.type-school { border-left-color: var(--sky); }
+  .wv-day.type-training { border-left-color: var(--pitch); }
+  .wv-day.type-matchday { border-left-color: var(--gold); }
+  .wv-day.type-rest { border-left-color: rgba(28, 36, 32, 0.4); }
+
+  .wv-day-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  .wv-day-name {
+    font-family: 'Oswald', Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .wv-day-meta { font-size: 11.5px; color: rgba(28, 36, 32, 0.5); }
+
+  .wv-kickoff {
+    font-size: 12.5px;
+    color: var(--gold-deep);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .wv-blocks { display: flex; flex-direction: column; gap: 2px; }
+
+  .wv-row { display: flex; gap: 10px; padding: 3px 2px; font-size: 12.5px; }
+  .wv-row .wv-time {
+    flex: 0 0 140px;
+    font-family: 'Oswald', Arial, sans-serif;
+    font-variant-numeric: tabular-nums;
+    color: rgba(28, 36, 32, 0.55);
+    font-weight: 600;
+    font-size: 11.5px;
+  }
+  .wv-row .wv-label { flex: 1; }
+  .wv-row.emph .wv-label { font-weight: 700; font-size: 13.5px; }
+  .wv-row.bed .wv-label { font-weight: 700; }
+  .wv-row.note .wv-label { font-style: italic; color: rgba(28, 36, 32, 0.6); }
+  .wv-row.note .wv-time { flex: 0 0 0; }
+
+  @media (max-width: 480px) {
+    .wv-row { flex-direction: column; gap: 0; }
+    .wv-row .wv-time { flex: none; }
+  }
+
   @media (max-width: 480px) {
     h1 { font-size: 24px; }
     .row { align-items: flex-start; }
@@ -456,7 +521,7 @@
 
   @media print {
     html, body { background: white; }
-    .tabs, .week-section, .add-row, .app-footer, .row-move, .style-dots, .big-toggle, .delete-btn {
+    .tabs, .week-section, .week-view-section, .add-row, .app-footer, .row-move, .style-dots, .big-toggle, .delete-btn {
       display: none !important;
     }
     .app { max-width: 100%; padding: 0; }
@@ -484,6 +549,11 @@
       <p class="eyebrow">This Week</p>
       <div class="week-grid" id="weekGrid"></div>
       <p class="week-hint">Tap a dot to set that day's type. Tap the day name to open its plan below.</p>
+    </section>
+
+    <section class="week-view-section">
+      <p class="eyebrow">Your Saved Week</p>
+      <div id="weekViewList"></div>
     </section>
 
     <nav class="tabs" id="tabs"></nav>
@@ -515,6 +585,7 @@
   var WEEK_ORDER = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
   var WEEKDAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]; // indexed by Date#getDay()
   var WEEKDAY_LABELS = { mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun" };
+  var WEEKDAY_FULL = { mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday" };
   var SHORT_NAME = { school: "School", training: "Training", matchday: "Match", rest: "Rest" };
   var STYLE_TO_DAYTYPE = { train: "training", school: "school", game: "matchday", bed: "rest" };
   var DAYTYPE_TO_STYLE = { training: "train", school: "school", matchday: "game", rest: "bed" };
@@ -696,7 +767,51 @@
     });
   }
 
+  function renderWeekView() {
+    var container = document.getElementById("weekViewList");
+    if (!container) return;
+
+    var html = WEEK_ORDER.map(function (day) {
+      var type = state.weekMap[day];
+      var meta = DAY_META[type];
+      var d = state.data[type];
+      if (!d) return "";
+
+      var kickoffHtml = "";
+      if (type === "matchday" && (d.kickoff || d.opponent)) {
+        var parts = [];
+        if (d.kickoff) parts.push("Kick-off " + escapeHtml(d.kickoff));
+        if (d.opponent) parts.push("vs " + escapeHtml(d.opponent));
+        kickoffHtml = '<p class="wv-kickoff">' + parts.join(" · ") + "</p>";
+      }
+
+      var rows = d.blocks.map(function (item) {
+        if (item.type === "note") {
+          return '<div class="wv-row note"><span class="wv-time"></span><span class="wv-label">' +
+            escapeHtml(item.text) + "</span></div>";
+        }
+        var cls = "wv-row" + (item.style === "bed" ? " bed" : "") + (item.big ? " emph" : "");
+        return '<div class="' + cls + '"><span class="wv-time">' + escapeHtml(item.time) +
+          '</span><span class="wv-label">' + escapeHtml(item.label) + "</span></div>";
+      }).join("");
+
+      return (
+        '<div class="wv-day type-' + type + '">' +
+          '<div class="wv-day-head">' +
+            '<span class="wv-day-name">' + WEEKDAY_FULL[day] + "</span>" +
+            '<span class="wv-day-meta">' + meta.name + "</span>" +
+          "</div>" +
+          kickoffHtml +
+          '<div class="wv-blocks">' + rows + "</div>" +
+        "</div>"
+      );
+    }).join("");
+
+    container.innerHTML = html;
+  }
+
   function scheduleSave(type) {
+    renderWeekView();
     setStatus("Saving…");
     clearTimeout(saveTimers[type]);
     saveTimers[type] = setTimeout(function () { doSave(type); }, 700);
@@ -767,6 +882,7 @@
         state.weekMap[day] = STYLE_TO_DAYTYPE[style];
         renderWeek();
         renderTabs();
+        renderWeekView();
         saveWeekMap();
       });
     });
@@ -1014,6 +1130,7 @@
       renderWeek();
       renderTabs();
       renderSheet();
+      renderWeekView();
     }).catch(function () {
       state.data = defaults();
       state.weekMap = defaultWeekMap();
@@ -1021,6 +1138,7 @@
       renderWeek();
       renderTabs();
       renderSheet();
+      renderWeekView();
       setStatus("Couldn't load saved changes — showing defaults");
     });
   }
