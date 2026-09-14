@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daily Routine — Editable</title>
+<title>Daily Routine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -29,20 +29,16 @@
     line-height: 1.5;
   }
 
-  button, input { font-family: inherit; color: inherit; }
+  button, input, textarea { font-family: inherit; color: inherit; }
 
-  .app {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 28px 18px 60px;
-  }
+  .app { max-width: 700px; margin: 0 auto; padding: 28px 18px 60px; }
 
   .app-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
     gap: 12px;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     flex-wrap: wrap;
   }
 
@@ -63,413 +59,111 @@
     letter-spacing: 0.01em;
   }
 
-  .today-date {
-    font-size: 13px;
-    color: rgba(28, 36, 32, 0.55);
-    padding-bottom: 4px;
+  .back-btn { display: inline-flex; align-items: center; gap: 6px; }
+
+  /* Home hero */
+  .home-hero {
+    border-radius: 10px;
+    padding: 22px 22px 24px;
+    margin-bottom: 22px;
+    color: var(--paper);
   }
 
-  /* Tabs */
-  .tabs {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 18px;
-  }
+  .home-hero.dt-school { background: var(--sky); }
+  .home-hero.dt-training { background: var(--pitch-deep); }
+  .home-hero.dt-matchday { background: var(--gold-deep); }
+  .home-hero.dt-rest { background: var(--ink); }
 
-  .tab {
-    border: none;
-    cursor: pointer;
-    padding: 9px 16px;
-    border-radius: 30px;
+  .home-hero-date {
     font-family: 'Oswald', Arial, sans-serif;
-    font-size: 13px;
+    font-size: 11.5px;
     font-weight: 600;
-    letter-spacing: 0.03em;
-    background: rgba(28, 36, 32, 0.06);
-    color: rgba(28, 36, 32, 0.55);
-    transition: background 0.15s ease, color 0.15s ease;
-  }
-
-  .tab.today::after {
-    content: "";
-    display: inline-block;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: currentColor;
-    margin-left: 7px;
-    vertical-align: middle;
-    opacity: 0.7;
-  }
-
-  .tab[data-type="school"].active { background: rgba(47, 93, 140, 0.16); color: var(--sky); }
-  .tab[data-type="training"].active { background: rgba(31, 122, 77, 0.16); color: var(--pitch-deep); }
-  .tab[data-type="matchday"].active { background: rgba(200, 146, 42, 0.22); color: var(--gold-deep); }
-  .tab[data-type="rest"].active { background: rgba(28, 36, 32, 0.12); color: var(--ink); }
-
-  /* Sheet */
-  .sheet {
-    background: white;
-    border-top: 8px solid var(--pitch);
-    border-radius: 4px;
-    padding: 22px 20px 18px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  }
-
-  .sheet.type-matchday { border-top-color: var(--gold); }
-
-  .sheet-header {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 14px;
-  }
-
-  .badge-input {
-    font-family: 'Oswald', Arial, sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    text-align: right;
-    border: none;
-    border-radius: 30px;
-    padding: 7px 16px;
-    background: rgba(28, 36, 32, 0.06);
-    color: rgba(28, 36, 32, 0.65);
-    width: 100%;
-    max-width: 260px;
-  }
-
-  .badge-input:focus { outline: 2px solid var(--line); background: rgba(28,36,32,0.09); }
-
-  .kickoff-row {
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-    background: rgba(200, 146, 42, 0.08);
-    border: 2px dashed var(--gold);
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin-bottom: 16px;
-  }
-
-  .kickoff-field { flex: 1; min-width: 140px; }
-
-  .kickoff-field label {
-    display: block;
-    font-family: 'Oswald', Arial, sans-serif;
-    font-size: 10px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--gold-deep);
-    margin-bottom: 3px;
+    opacity: 0.8;
+    margin-bottom: 8px;
   }
 
-  .kickoff-field input {
-    width: 100%;
-    border: none;
-    border-bottom: 2px dotted rgba(200, 146, 42, 0.5);
-    background: transparent;
+  .home-hero-type {
     font-family: 'Oswald', Arial, sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--gold-deep);
-    padding: 2px 0;
+    font-size: 30px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
   }
 
-  .kickoff-field input:focus { outline: none; border-bottom-color: var(--gold); }
-
-  /* Blocks */
-  .blocks { display: flex; flex-direction: column; gap: 4px; }
-
-  .row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 7px 8px;
-    border-left: 5px solid var(--line);
-    border-radius: 3px;
-    flex-wrap: wrap;
-  }
-
-  .row:nth-child(even) { background: rgba(28, 36, 32, 0.025); }
-
-  .row.style-train { border-left-color: var(--pitch); }
-  .row.style-school { border-left-color: var(--sky); }
-  .row.style-game { border-left-color: var(--gold); }
-  .row.style-bed { border-left-color: rgba(28, 36, 32, 0.4); }
-
-  .row.note-row { border-left-style: dashed; border-left-color: rgba(28,36,32,0.3); }
-
-  .row-move {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    flex-shrink: 0;
-  }
-
-  .icon-btn {
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    color: rgba(28, 36, 32, 0.4);
-    font-size: 10px;
-    line-height: 1;
-    padding: 3px 4px;
-    border-radius: 3px;
-  }
-
-  .icon-btn:hover { background: rgba(28,36,32,0.08); color: var(--ink); }
-  .icon-btn:disabled { opacity: 0.25; cursor: default; }
-  .icon-btn:disabled:hover { background: transparent; }
-
-  .row-fields {
-    display: flex;
-    gap: 10px;
-    flex: 1 1 260px;
-    min-width: 0;
-  }
-
-  .time-input {
-    flex: 0 0 150px;
-    border: none;
-    background: transparent;
-    font-variant-numeric: tabular-nums;
+  .type-pill {
+    display: inline-block;
+    font-family: 'Oswald', Arial, sans-serif;
     font-size: 12.5px;
     font-weight: 600;
-    font-family: 'Oswald', Arial, sans-serif;
-    color: rgba(28, 36, 32, 0.6);
-    padding: 5px 4px;
-    border-bottom: 1px solid transparent;
-    min-width: 0;
-  }
-
-  .label-input {
-    flex: 1 1 auto;
-    border: none;
-    background: transparent;
-    font-size: 13.5px;
-    color: var(--ink);
-    padding: 5px 4px;
-    border-bottom: 1px solid transparent;
-    min-width: 0;
-  }
-
-  .note-input {
-    flex: 1 1 auto;
-    border: none;
-    background: transparent;
-    font-size: 13px;
-    font-style: italic;
-    color: rgba(28, 36, 32, 0.65);
-    padding: 5px 4px;
-    border-bottom: 1px solid transparent;
-    min-width: 0;
-  }
-
-  .time-input:focus, .label-input:focus, .note-input:focus {
-    outline: none;
-    border-bottom-color: var(--line);
-    background: rgba(28,36,32,0.03);
-  }
-
-  .row.style-bed .label-input { font-weight: 700; }
-  .label-input.emph { font-weight: 700; font-size: 14.5px; }
-
-  .row-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-  }
-
-  .style-dots { display: flex; gap: 5px; }
-
-  .dot {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    outline-offset: 2px;
-  }
-
-  .dot-train { background: var(--pitch); }
-  .dot-school { background: var(--sky); }
-  .dot-game { background: var(--gold); }
-  .dot-bed { background: rgba(28, 36, 32, 0.4); }
-  .dot.active { outline: 2px solid var(--ink); }
-
-  .big-toggle {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 11px;
-    color: rgba(28, 36, 32, 0.55);
-    cursor: pointer;
+    letter-spacing: 0.03em;
+    padding: 6px 14px;
+    border-radius: 30px;
     white-space: nowrap;
   }
 
-  .big-toggle input { cursor: pointer; }
+  .type-pill.dt-school { background: rgba(47, 93, 140, 0.16); color: var(--sky); }
+  .type-pill.dt-training { background: rgba(31, 122, 77, 0.16); color: var(--pitch-deep); }
+  .type-pill.dt-matchday { background: rgba(200, 146, 42, 0.22); color: var(--gold-deep); }
+  .type-pill.dt-rest { background: rgba(28, 36, 32, 0.12); color: var(--ink); }
 
-  .delete-btn { font-size: 16px; color: rgba(28,36,32,0.35); }
-  .delete-btn:hover { color: #b23b3b; background: rgba(178,59,59,0.08); }
+  /* Home nav */
+  .home-nav { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+  .home-nav-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
 
-  .add-row {
+  .home-nav-btn {
     display: flex;
-    gap: 10px;
-    margin-top: 14px;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    font-family: 'Oswald', Arial, sans-serif;
-    font-size: 12.5px;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    border-radius: 6px;
-    padding: 9px 14px;
-    cursor: pointer;
+    text-align: left;
     border: none;
-  }
-
-  .btn.ghost {
-    background: rgba(28, 36, 32, 0.05);
-    color: rgba(28, 36, 32, 0.7);
-  }
-  .btn.ghost:hover { background: rgba(28, 36, 32, 0.09); }
-
-  .btn.subtle {
-    background: transparent;
-    color: rgba(28, 36, 32, 0.55);
-    border: 1px solid var(--line);
-  }
-  .btn.subtle:hover { background: rgba(28,36,32,0.04); }
-
-  .btn.danger { background: #b23b3b; color: white; }
-  .btn.danger:hover { background: #9a3232; }
-
-  /* Footer */
-  .app-footer {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-top: 18px;
-    flex-wrap: wrap;
-  }
-
-  .confirm-box {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12.5px;
-    color: rgba(28,36,32,0.7);
-    flex-wrap: wrap;
-  }
-
-  .status {
-    font-size: 12px;
-    color: rgba(28, 36, 32, 0.4);
-    margin-left: auto;
-  }
-
-  .loading-note {
-    text-align: center;
-    padding: 60px 20px;
-    color: rgba(28,36,32,0.5);
-    font-size: 14px;
-  }
-
-  /* Week calendar */
-  .week-section { margin-bottom: 20px; }
-
-  .week-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
-    margin-top: 6px;
-  }
-
-  .week-tile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 4px;
+    cursor: pointer;
     border-radius: 8px;
-    border: 2px solid transparent;
-  }
-
-  .week-tile.today { border-color: var(--ink); }
-
-  .week-tile.tint-school { background: rgba(47, 93, 140, 0.10); }
-  .week-tile.tint-training { background: rgba(31, 122, 77, 0.10); }
-  .week-tile.tint-matchday { background: rgba(200, 146, 42, 0.14); }
-  .week-tile.tint-rest { background: rgba(28, 36, 32, 0.07); }
-
-  .week-day-btn {
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-family: 'Oswald', Arial, sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--ink);
-    padding: 2px 4px;
-    border-radius: 4px;
-  }
-
-  .week-day-btn:hover { background: rgba(28, 36, 32, 0.08); }
-
-  .week-dots { display: flex; gap: 4px; }
-
-  .week-type-label {
-    font-size: 10px;
-    font-weight: 600;
-    text-align: center;
-  }
-
-  .week-type-label.c-school { color: var(--sky); }
-  .week-type-label.c-training { color: var(--pitch-deep); }
-  .week-type-label.c-matchday { color: var(--gold-deep); }
-  .week-type-label.c-rest { color: rgba(28, 36, 32, 0.6); }
-
-  .week-hint {
-    font-size: 11.5px;
-    color: rgba(28, 36, 32, 0.45);
-    margin-top: 8px;
-  }
-
-  /* Read-only saved week view */
-  .week-view-section { margin-bottom: 20px; }
-
-  .wv-day {
-    background: white;
-    border-radius: 6px;
+    background: var(--paper);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
     border-left: 6px solid var(--line);
-    padding: 14px 16px;
-    margin-bottom: 10px;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+  }
+
+  .home-nav-btn:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.1); transform: translateY(-1px); }
+
+  .home-nav-btn.primary { align-items: center; gap: 14px; padding: 18px; }
+  .home-nav-btn.secondary { flex-direction: column; align-items: flex-start; gap: 8px; padding: 14px; }
+
+  .home-nav-btn .hn-icon { flex-shrink: 0; opacity: 0.8; }
+  .home-nav-btn .hn-text { display: flex; flex-direction: column; gap: 2px; }
+
+  .home-nav-btn .hn-title {
+    font-family: 'Oswald', Arial, sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .home-nav-btn.primary .hn-title { font-size: 16px; }
+  .home-nav-btn .hn-sub { font-size: 11.5px; color: rgba(28, 36, 32, 0.5); }
+
+  .home-nav-btn.nav-skill { border-left-color: var(--pitch); }
+  .home-nav-btn.nav-goals { border-left-color: var(--gold); }
+  .home-nav-btn.nav-week { border-left-color: var(--sky); }
+  .home-nav-btn.nav-saved { border-left-color: rgba(28, 36, 32, 0.4); }
+
+  @media (max-width: 480px) { .home-nav-row { grid-template-columns: 1fr; } }
+
+  /* Daily anchor tracker */
+  .anchor-section { margin-bottom: 4px; }
+
+  .anchor-card {
+    background: var(--paper);
+    border-radius: 6px;
+    border-left: 6px solid var(--pitch);
+    padding: 16px 18px 14px;
     box-shadow: 0 1px 6px rgba(0,0,0,0.06);
   }
 
-  .wv-day.type-school { border-left-color: var(--sky); }
-  .wv-day.type-training { border-left-color: var(--pitch); }
-  .wv-day.type-matchday { border-left-color: var(--gold); }
-  .wv-day.type-rest { border-left-color: rgba(28, 36, 32, 0.4); }
+  .anchor-card-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
 
-  .wv-day-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 8px;
-    flex-wrap: wrap;
-  }
-
-  .wv-day-name {
+  .anchor-title {
     font-family: 'Oswald', Arial, sans-serif;
     font-size: 15px;
     font-weight: 700;
@@ -477,26 +171,290 @@
     letter-spacing: 0.03em;
   }
 
+  .anchor-streak-stat { text-align: right; line-height: 1; }
+  .anchor-streak-num { display: block; font-family: 'Oswald', Arial, sans-serif; font-size: 26px; font-weight: 700; color: var(--gold-deep); }
+  .anchor-streak-label { display: block; font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(28, 36, 32, 0.45); margin-top: 2px; }
+
+  .anchor-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .anchor-item { display: flex; align-items: center; gap: 12px; padding: 8px 6px; border-radius: 4px; cursor: pointer; user-select: none; }
+  .anchor-item:hover { background: rgba(28, 36, 32, 0.035); }
+
+  .anchor-checkbox {
+    width: 21px; height: 21px; border-radius: 50%; border: 2px solid var(--line);
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: white; transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .anchor-checkbox.checked { background: var(--pitch); border-color: var(--pitch); }
+  @keyframes anchorPop { 0% { transform: scale(1); } 45% { transform: scale(1.3); } 100% { transform: scale(1); } }
+  .anchor-checkbox.pop { animation: anchorPop 0.35s ease; }
+
+  .anchor-label { font-size: 13.5px; }
+  .anchor-item.done .anchor-label { color: rgba(28, 36, 32, 0.45); text-decoration: line-through; }
+
+  .anchor-history { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+
+  .anchor-history-title {
+    font-family: 'Oswald', Arial, sans-serif; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(28, 36, 32, 0.4); margin-bottom: 8px;
+  }
+
+  .anchor-history-row { display: flex; gap: 6px; }
+  .anchor-history-day { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+
+  .anchor-history-label {
+    font-family: 'Oswald', Arial, sans-serif; font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.03em; text-transform: uppercase; color: rgba(28, 36, 32, 0.4);
+  }
+
+  .anchor-history-dot { width: 16px; height: 16px; border-radius: 50%; background: rgba(28, 36, 32, 0.08); }
+  .anchor-history-dot.full { background: var(--pitch); }
+  .anchor-history-dot.partial { background: var(--gold); }
+  .anchor-history-day.is-today .anchor-history-label { color: var(--ink); }
+
+  /* Skill focus */
+  .skill-card { background: white; border-radius: 6px; border-left: 6px solid var(--pitch); padding: 18px 20px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
+
+  .skill-name-input {
+    font-family: 'Oswald', Arial, sans-serif; font-size: 20px; font-weight: 700;
+    border: none; background: transparent; width: 100%; padding: 4px 0; border-bottom: 1px solid transparent;
+  }
+
+  .skill-name-input:focus { outline: none; border-bottom-color: var(--line); }
+
+  .skill-meta-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; }
+  .skill-field { display: flex; flex-direction: column; gap: 3px; }
+
+  .skill-field label {
+    font-family: 'Oswald', Arial, sans-serif; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(28, 36, 32, 0.45);
+  }
+
+  .skill-field input { border: none; border-bottom: 1px solid var(--line); background: transparent; font-size: 13px; padding: 4px 2px; }
+
+  .skill-days-left { font-family: 'Oswald', Arial, sans-serif; font-size: 13px; font-weight: 600; color: var(--gold-deep); margin-top: 14px; }
+
+  .skill-log { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .skill-log-title { margin-bottom: 8px; }
+
+  .skill-log-entry { font-size: 12.5px; padding: 6px 0; border-bottom: 1px dashed var(--line); display: flex; gap: 10px; }
+  .skill-log-date { color: rgba(28, 36, 32, 0.45); flex-shrink: 0; font-family: 'Oswald', Arial, sans-serif; font-size: 11px; font-weight: 600; }
+  .skill-log-empty { font-size: 12px; color: rgba(28, 36, 32, 0.4); padding: 6px 0; }
+
+  .skill-log-add { display: flex; gap: 8px; margin-top: 10px; }
+  .skill-log-add input { flex: 1; border: none; border-bottom: 1px solid var(--line); background: transparent; font-size: 13px; padding: 6px 2px; }
+
+  .skill-swap { margin-top: 18px; }
+
+  /* Goal ladder */
+  .goal-domain { background: white; border-radius: 6px; border-left: 6px solid var(--sky); padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
+
+  .goal-domain-title {
+    font-family: 'Oswald', Arial, sans-serif; font-size: 15px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 8px;
+  }
+
+  .goal-tier { padding: 12px 0; border-top: 1px solid var(--line); }
+  .goal-tier:first-of-type { border-top: none; }
+
+  .goal-tier-label {
+    font-family: 'Oswald', Arial, sans-serif; font-size: 10.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(28, 36, 32, 0.45); margin-bottom: 6px;
+  }
+
+  .goal-text { width: 100%; border: none; background: transparent; font-size: 13.5px; resize: vertical; min-height: 42px; padding: 4px 2px; font-family: inherit; }
+  .goal-text:focus, .goal-reflection:focus { outline: none; background: rgba(28,36,32,0.03); }
+
+  .goal-deadline-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .goal-deadline-row label { font-size: 11px; color: rgba(28, 36, 32, 0.5); white-space: nowrap; }
+  .goal-deadline-input { flex: 1; border: none; border-bottom: 1px solid var(--line); background: transparent; font-size: 12.5px; padding: 4px 2px; }
+
+  .goal-reflection {
+    width: 100%; border: none; border-top: 1px dashed var(--line); background: transparent;
+    font-size: 12.5px; font-style: italic; color: rgba(28, 36, 32, 0.7); resize: vertical;
+    min-height: 34px; margin-top: 8px; padding: 8px 2px 2px; font-family: inherit;
+  }
+
+  .goal-complete-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px; color: rgba(28, 36, 32, 0.6); cursor: pointer; }
+
+  /* Sheet */
+  .sheet { background: white; border-top: 8px solid var(--pitch); border-radius: 4px; padding: 22px 20px 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+  .sheet.type-matchday { border-top-color: var(--gold); }
+
+  .sheet-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+
+  .badge-input {
+    font-family: 'Oswald', Arial, sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+    text-align: right; border: none; border-radius: 30px; padding: 7px 16px;
+    background: rgba(28, 36, 32, 0.06); color: rgba(28, 36, 32, 0.65); flex: 1; max-width: 260px;
+  }
+
+  .badge-input:focus { outline: 2px solid var(--line); background: rgba(28,36,32,0.09); }
+
+  .kickoff-row {
+    display: flex; gap: 14px; flex-wrap: wrap; background: rgba(200, 146, 42, 0.08);
+    border: 2px dashed var(--gold); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;
+  }
+
+  .kickoff-field { flex: 1; min-width: 140px; }
+
+  .kickoff-field label {
+    display: block; font-family: 'Oswald', Arial, sans-serif; font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold-deep); margin-bottom: 3px;
+  }
+
+  .kickoff-field input {
+    width: 100%; border: none; border-bottom: 2px dotted rgba(200, 146, 42, 0.5); background: transparent;
+    font-family: 'Oswald', Arial, sans-serif; font-size: 16px; font-weight: 600; color: var(--gold-deep); padding: 2px 0;
+  }
+
+  .kickoff-field input:focus { outline: none; border-bottom-color: var(--gold); }
+
+  .blocks { display: flex; flex-direction: column; gap: 4px; }
+
+  .row {
+    display: flex; align-items: center; gap: 10px; padding: 7px 8px;
+    border-left: 5px solid var(--line); border-radius: 3px; flex-wrap: wrap;
+  }
+
+  .row:nth-child(even) { background: rgba(28, 36, 32, 0.025); }
+  .row.style-train { border-left-color: var(--pitch); }
+  .row.style-school { border-left-color: var(--sky); }
+  .row.style-game { border-left-color: var(--gold); }
+  .row.style-bed { border-left-color: rgba(28, 36, 32, 0.4); }
+  .row.note-row { border-left-style: dashed; border-left-color: rgba(28,36,32,0.3); }
+
+  .row-move { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; }
+
+  .icon-btn {
+    border: none; background: transparent; cursor: pointer; color: rgba(28, 36, 32, 0.4);
+    font-size: 10px; line-height: 1; padding: 3px 4px; border-radius: 3px;
+  }
+
+  .icon-btn:hover { background: rgba(28,36,32,0.08); color: var(--ink); }
+  .icon-btn:disabled { opacity: 0.25; cursor: default; }
+  .icon-btn:disabled:hover { background: transparent; }
+
+  .row-fields { display: flex; gap: 10px; flex: 1 1 260px; min-width: 0; }
+
+  .time-input {
+    flex: 0 0 150px; border: none; background: transparent; font-variant-numeric: tabular-nums;
+    font-size: 12.5px; font-weight: 600; font-family: 'Oswald', Arial, sans-serif;
+    color: rgba(28, 36, 32, 0.6); padding: 5px 4px; border-bottom: 1px solid transparent; min-width: 0;
+  }
+
+  .label-input {
+    flex: 1 1 auto; border: none; background: transparent; font-size: 13.5px; color: var(--ink);
+    padding: 5px 4px; border-bottom: 1px solid transparent; min-width: 0;
+  }
+
+  .note-input {
+    flex: 1 1 auto; border: none; background: transparent; font-size: 13px; font-style: italic;
+    color: rgba(28, 36, 32, 0.65); padding: 5px 4px; border-bottom: 1px solid transparent; min-width: 0;
+  }
+
+  .time-input:focus, .label-input:focus, .note-input:focus { outline: none; border-bottom-color: var(--line); background: rgba(28,36,32,0.03); }
+
+  .row.style-bed .label-input { font-weight: 700; }
+  .label-input.emph { font-weight: 700; font-size: 14.5px; }
+
+  .row-controls { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .style-dots { display: flex; gap: 5px; }
+
+  .dot { width: 15px; height: 15px; border-radius: 50%; border: none; cursor: pointer; padding: 0; outline-offset: 2px; }
+  .dot-train { background: var(--pitch); }
+  .dot-school { background: var(--sky); }
+  .dot-game { background: var(--gold); }
+  .dot-bed { background: rgba(28, 36, 32, 0.4); }
+  .dot.active { outline: 2px solid var(--ink); }
+
+  .big-toggle { display: flex; align-items: center; gap: 4px; font-size: 11px; color: rgba(28, 36, 32, 0.55); cursor: pointer; white-space: nowrap; }
+  .big-toggle input { cursor: pointer; }
+
+  .delete-btn { font-size: 16px; color: rgba(28,36,32,0.35); }
+  .delete-btn:hover { color: #b23b3b; background: rgba(178,59,59,0.08); }
+
+  .add-row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+
+  .btn {
+    font-family: 'Oswald', Arial, sans-serif; font-size: 12.5px; font-weight: 600; letter-spacing: 0.03em;
+    border-radius: 6px; padding: 9px 14px; cursor: pointer; border: none;
+  }
+
+  .btn.ghost { background: rgba(28, 36, 32, 0.05); color: rgba(28, 36, 32, 0.7); }
+  .btn.ghost:hover { background: rgba(28, 36, 32, 0.09); }
+  .btn.subtle { background: transparent; color: rgba(28, 36, 32, 0.55); border: 1px solid var(--line); }
+  .btn.subtle:hover { background: rgba(28,36,32,0.04); }
+  .btn.danger { background: #b23b3b; color: white; }
+  .btn.danger:hover { background: #9a3232; }
+
+  .app-footer { display: flex; align-items: center; gap: 14px; margin-top: 18px; flex-wrap: wrap; }
+  .confirm-box { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: rgba(28,36,32,0.7); flex-wrap: wrap; }
+  .status { font-size: 12px; color: rgba(28, 36, 32, 0.4); margin-left: auto; }
+  .loading-note { text-align: center; padding: 60px 20px; color: rgba(28,36,32,0.5); font-size: 14px; }
+
+  /* Week calendar */
+  .week-section { margin-bottom: 20px; }
+  .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 6px; }
+
+  .week-tile {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 10px 4px; border-radius: 8px; border: 2px solid transparent;
+  }
+
+  .week-tile.today { border-color: var(--ink); }
+  .week-tile.selected { box-shadow: 0 0 0 2px var(--gold-deep) inset; }
+  .week-tile.tint-school { background: rgba(47, 93, 140, 0.10); }
+  .week-tile.tint-training { background: rgba(31, 122, 77, 0.10); }
+  .week-tile.tint-matchday { background: rgba(200, 146, 42, 0.14); }
+  .week-tile.tint-rest { background: rgba(28, 36, 32, 0.07); }
+
+  .week-day-btn {
+    border: none; background: none; cursor: pointer; font-family: 'Oswald', Arial, sans-serif;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--ink); padding: 2px 4px; border-radius: 4px;
+  }
+
+  .week-day-btn:hover { background: rgba(28, 36, 32, 0.08); }
+  .week-dots { display: flex; gap: 4px; }
+
+  .week-type-label { font-size: 10px; font-weight: 600; text-align: center; }
+  .week-type-label.c-school { color: var(--sky); }
+  .week-type-label.c-training { color: var(--pitch-deep); }
+  .week-type-label.c-matchday { color: var(--gold-deep); }
+  .week-type-label.c-rest { color: rgba(28, 36, 32, 0.6); }
+
+  .week-hint { font-size: 11.5px; color: rgba(28, 36, 32, 0.45); margin-top: 8px; }
+
+  /* Saved week view */
+  .wv-day {
+    background: white; border-radius: 6px; border-left: 6px solid var(--line);
+    padding: 14px 16px; margin-bottom: 10px; box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  }
+
+  .wv-day.type-school { border-left-color: var(--sky); }
+  .wv-day.type-training { border-left-color: var(--pitch); }
+  .wv-day.type-matchday { border-left-color: var(--gold); }
+  .wv-day.type-rest { border-left-color: rgba(28, 36, 32, 0.4); }
+
+  .wv-day-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+
+  .wv-day-name {
+    font-family: 'Oswald', Arial, sans-serif; font-size: 15px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.03em;
+  }
+
   .wv-day-meta { font-size: 11.5px; color: rgba(28, 36, 32, 0.5); }
-
-  .wv-kickoff {
-    font-size: 12.5px;
-    color: var(--gold-deep);
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-
+  .wv-kickoff { font-size: 12.5px; color: var(--gold-deep); font-weight: 600; margin-bottom: 8px; }
   .wv-blocks { display: flex; flex-direction: column; gap: 2px; }
-
   .wv-row { display: flex; gap: 10px; padding: 3px 2px; font-size: 12.5px; }
+
   .wv-row .wv-time {
-    flex: 0 0 140px;
-    font-family: 'Oswald', Arial, sans-serif;
-    font-variant-numeric: tabular-nums;
-    color: rgba(28, 36, 32, 0.55);
-    font-weight: 600;
-    font-size: 11.5px;
+    flex: 0 0 140px; font-family: 'Oswald', Arial, sans-serif; font-variant-numeric: tabular-nums;
+    color: rgba(28, 36, 32, 0.55); font-weight: 600; font-size: 11.5px;
   }
+
   .wv-row .wv-label { flex: 1; }
   .wv-row.emph .wv-label { font-weight: 700; font-size: 13.5px; }
   .wv-row.bed .wv-label { font-weight: 700; }
@@ -510,6 +468,7 @@
 
   @media (max-width: 480px) {
     h1 { font-size: 24px; }
+    .home-hero-type { font-size: 24px; }
     .row { align-items: flex-start; }
     .row-fields { flex-direction: column; gap: 2px; }
     .time-input { flex: none; width: 100%; }
@@ -517,18 +476,19 @@
     .status { margin-left: 0; width: 100%; order: 10; }
     .week-grid { grid-template-columns: repeat(4, 1fr); }
     .week-type-label { font-size: 9px; }
+    .sheet-header { align-items: flex-start; }
+    .badge-input { max-width: none; text-align: left; }
   }
 
   @media print {
     html, body { background: white; }
-    .tabs, .week-section, .week-view-section, .add-row, .app-footer, .row-move, .style-dots, .big-toggle, .delete-btn {
+    .week-section, .add-row, .app-footer, .row-move, .style-dots, .big-toggle, .delete-btn, .back-btn {
       display: none !important;
     }
     .app { max-width: 100%; padding: 0; }
     .sheet { box-shadow: none; }
     .badge-input, .kickoff-field input, .time-input, .label-input, .note-input {
-      border: none !important;
-      background: transparent !important;
+      border: none !important; background: transparent !important;
     }
     .row-controls { display: none !important; }
     .row { padding-left: 12px; }
@@ -540,33 +500,110 @@
     <header class="app-header">
       <div>
         <p class="eyebrow">Daily Routine</p>
-        <h1 id="dayTitle">School Day</h1>
+        <h1 id="pageTitle">Home</h1>
       </div>
-      <p class="today-date" id="todayDate"></p>
+      <button class="btn subtle back-btn" id="backBtn" hidden>&larr; Home</button>
     </header>
 
-    <section class="week-section">
-      <p class="eyebrow">This Week</p>
-      <div class="week-grid" id="weekGrid"></div>
-      <p class="week-hint">Tap a dot to set that day's type. Tap the day name to open its plan below.</p>
+    <!-- HOME -->
+    <section class="view" id="view-home">
+      <div class="home-hero" id="homeHero">
+        <p class="home-hero-date" id="homeDate"></p>
+        <h2 class="home-hero-type" id="homeDayType"></h2>
+      </div>
+
+      <section class="anchor-section">
+        <p class="eyebrow">Anchors</p>
+        <div class="anchor-card" id="anchorCard"></div>
+      </section>
+
+      <nav class="home-nav">
+        <button class="home-nav-btn primary nav-week" data-view="week">
+          <span class="hn-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4.5" width="18" height="16" rx="2"></rect>
+              <line x1="3" y1="9.5" x2="21" y2="9.5"></line>
+              <line x1="7.5" y1="2.5" x2="7.5" y2="6.5"></line>
+              <line x1="16.5" y1="2.5" x2="16.5" y2="6.5"></line>
+            </svg>
+          </span>
+          <span class="hn-text">
+            <span class="hn-title">This Week</span>
+            <span class="hn-sub">Plan &amp; edit your days</span>
+          </span>
+        </button>
+        <div class="home-nav-row">
+          <button class="home-nav-btn secondary nav-skill" data-view="skill">
+            <span class="hn-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6">
+                <circle cx="12" cy="12" r="8"></circle>
+                <circle cx="12" cy="12" r="4"></circle>
+                <circle cx="12" cy="12" r="0.6" fill="currentColor" stroke="none"></circle>
+              </svg>
+            </span>
+            <span class="hn-text"><span class="hn-title">Skill Focus</span></span>
+          </button>
+          <button class="home-nav-btn secondary nav-goals" data-view="goals">
+            <span class="hn-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <line x1="4" y1="20" x2="4" y2="14"></line>
+                <line x1="12" y1="20" x2="12" y2="9"></line>
+                <line x1="20" y1="20" x2="20" y2="4"></line>
+              </svg>
+            </span>
+            <span class="hn-text"><span class="hn-title">Goal Ladder</span></span>
+          </button>
+          <button class="home-nav-btn secondary nav-saved" data-view="saved">
+            <span class="hn-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <line x1="8" y1="6" x2="20" y2="6"></line>
+                <line x1="8" y1="12" x2="20" y2="12"></line>
+                <line x1="8" y1="18" x2="20" y2="18"></line>
+                <circle cx="4" cy="6" r="1.3" fill="currentColor" stroke="none"></circle>
+                <circle cx="4" cy="12" r="1.3" fill="currentColor" stroke="none"></circle>
+                <circle cx="4" cy="18" r="1.3" fill="currentColor" stroke="none"></circle>
+              </svg>
+            </span>
+            <span class="hn-text"><span class="hn-title">Saved Week</span></span>
+          </button>
+        </div>
+      </nav>
     </section>
 
-    <section class="week-view-section">
-      <p class="eyebrow">Your Saved Week</p>
+    <!-- SKILL FOCUS -->
+    <section class="view" id="view-skill" hidden>
+      <div id="skillCard"></div>
+    </section>
+
+    <!-- GOAL LADDER -->
+    <section class="view" id="view-goals" hidden>
+      <div id="goalsContainer"></div>
+    </section>
+
+    <!-- THIS WEEK + WEEK EDITOR -->
+    <section class="view" id="view-week" hidden>
+      <section class="week-section">
+        <p class="eyebrow">This Week</p>
+        <div class="week-grid" id="weekGrid"></div>
+        <p class="week-hint">Tap a dot to relabel that day's type. Tap the day name to edit that day below.</p>
+      </section>
+
+      <main id="sheetContainer">
+        <p class="loading-note">Loading your schedule&hellip;</p>
+      </main>
+
+      <footer class="app-footer" id="appFooter" hidden>
+        <div id="resetArea"></div>
+        <button class="btn subtle" id="printBtn">Print this day</button>
+        <span class="status" id="statusText">Autosaves as you go</span>
+      </footer>
+    </section>
+
+    <!-- SAVED WEEK -->
+    <section class="view" id="view-saved" hidden>
+      <p class="eyebrow">Saved Week</p>
       <div id="weekViewList"></div>
     </section>
-
-    <nav class="tabs" id="tabs"></nav>
-
-    <main id="sheetContainer">
-      <p class="loading-note">Loading your schedule…</p>
-    </main>
-
-    <footer class="app-footer" id="appFooter" hidden>
-      <div id="resetArea"></div>
-      <button class="btn subtle" id="printBtn">Print this day</button>
-      <span class="status" id="statusText">Autosaves as you go</span>
-    </footer>
   </div>
 
 <script>
@@ -574,21 +611,67 @@
   "use strict";
 
   var DAY_META = {
-    school:   { name: "School Day",    accent: "school",   defaultBadge: "Mon / no evening training" },
-    training: { name: "Team Training", accent: "training",  defaultBadge: "Tue – Fri / Sat (no game)" },
-    matchday: { name: "Matchday",      accent: "matchday",  defaultBadge: "Usually Saturday" },
-    rest:     { name: "Rest Day",      accent: "rest",      defaultBadge: "Sunday" }
+    school:   { name: "School Day",    defaultBadge: "No evening training" },
+    training: { name: "Team Training", defaultBadge: "Team training tonight" },
+    matchday: { name: "Matchday",      defaultBadge: "Usually Saturday" },
+    rest:     { name: "Rest Day",      defaultBadge: "Rest & reset" }
   };
 
   var TYPE_ORDER = ["school", "training", "matchday", "rest"];
 
   var WEEK_ORDER = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
-  var WEEKDAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]; // indexed by Date#getDay()
+  var WEEKDAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
   var WEEKDAY_LABELS = { mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun" };
   var WEEKDAY_FULL = { mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday" };
   var SHORT_NAME = { school: "School", training: "Training", matchday: "Match", rest: "Rest" };
   var STYLE_TO_DAYTYPE = { train: "training", school: "school", game: "matchday", bed: "rest" };
   var DAYTYPE_TO_STYLE = { training: "train", school: "school", matchday: "game", rest: "bed" };
+
+  var ANCHORS = [
+    { id: "tech", label: "Technical session" },
+    { id: "hw", label: "Homework started" },
+    { id: "wind", label: "Wind-down chain" }
+  ];
+
+  var GOAL_DOMAINS = ["football", "gpa", "nhs", "ap"];
+  var DOMAIN_META = {
+    football: { name: "Football" },
+    gpa: { name: "GPA" },
+    nhs: { name: "NHS Volunteering" },
+    ap: { name: "AP Exam" }
+  };
+  var GOAL_TIERS = ["season", "monthly", "weekly"];
+  var TIER_LABELS = { season: "Season Goal", monthly: "Monthly Milestone", weekly: "Weekly Target" };
+
+  var VIEW_META = {
+    home: { title: "Home" },
+    skill: { title: "Skill Focus" },
+    goals: { title: "Goal Ladder" },
+    week: { title: "This Week" },
+    saved: { title: "Saved Week" }
+  };
+
+  function dateKey(d) {
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1).padStart(2, "0");
+    var day = String(d.getDate()).padStart(2, "0");
+    return y + "-" + m + "-" + day;
+  }
+
+  function daysBetween(aStr, bStr) {
+    var a = new Date(aStr + "T00:00:00");
+    var b = new Date(bStr + "T00:00:00");
+    return Math.round((b - a) / 86400000);
+  }
+
+  function addMonthsToDateStr(dateStr, months) {
+    var d = new Date(dateStr + "T00:00:00");
+    var whole = Math.trunc(months);
+    d.setMonth(d.getMonth() + whole);
+    var frac = months - whole;
+    if (frac) d.setDate(d.getDate() + Math.round(frac * 30));
+    return dateKey(d);
+  }
 
   function defaultWeekMap() {
     return { mon: "school", tue: "training", wed: "training", thu: "training", fri: "training", sat: "training", sun: "rest" };
@@ -596,17 +679,13 @@
 
   function todayKey(date) { return WEEKDAY_KEYS[date.getDay()]; }
 
-  function blk(time, label, style, big) {
-    return { type: "block", time: time, label: label, style: style, big: !!big };
-  }
-  function note(text) {
-    return { type: "note", text: text };
-  }
+  function blk(time, label, style, big) { return { type: "block", time: time, label: label, style: style, big: !!big }; }
+  function note(text) { return { type: "note", text: text }; }
 
   function defaults() {
     return {
       school: {
-        badge: "Mon / no evening training",
+        badge: "No evening training",
         blocks: [
           blk("5:45 – 5:50 AM", "Wake up & get ready", "train"),
           blk("5:50 – 6:00 AM", "Travel to the pitch", "train"),
@@ -617,18 +696,18 @@
           blk("7:08 – 7:11 AM", "Pack up", "train"),
           blk("7:11 – 7:30 AM", "Free time", "train"),
           blk("7:30 AM – 4:00 PM", "School", "school"),
-          blk("4:00 – 5:00 PM", "Snack & downtime", "school"),
+          blk("4:00 – 5:00 PM", "Decompress: rest, clean, organize, snack", "school"),
           blk("5:00 – 6:00 PM", "Homework", "school"),
           blk("6:00 – 8:10 PM", "Free time / hobbies", "train"),
           blk("8:10 – 8:15 PM", "Quick rinse", "train"),
           blk("8:15 – 8:30 PM", "Put football stuff away & clean room", "train"),
           blk("8:30 – 9:15 PM", "Dinner", "train"),
-          blk("9:15 – 9:30 PM", "Read bible & pray", "train"),
+          blk("9:15 – 9:30 PM", "Write tomorrow's tasks, read, Bible & pray", "train"),
           blk("9:30 PM", "Bedtime", "bed")
         ]
       },
       training: {
-        badge: "Tue – Fri / Sat (no game)",
+        badge: "Team training tonight",
         blocks: [
           blk("5:45 – 5:50 AM", "Wake up & get ready", "train"),
           blk("5:50 – 6:00 AM", "Travel to the pitch", "train"),
@@ -639,15 +718,15 @@
           blk("7:08 – 7:11 AM", "Pack up", "train"),
           blk("7:11 – 7:30 AM", "Free time", "train"),
           blk("7:30 AM – 4:00 PM", "School", "school"),
-          blk("4:00 – 5:45 PM", "Snack & homework", "school"),
-          blk("5:45 – 6:45 PM", "Dinner", "train"),
+          blk("4:00 – 5:00 PM", "Decompress: rest, clean, organize, snack (incl. balcony juggling)", "school"),
+          blk("5:00 – 6:45 PM", "Homework", "school"),
           blk("6:45 – 7:00 PM", "Get ready & catch the bus", "train"),
-          blk("Tue 7:45 / Wed–Fri 7:30 PM", "Team training (~90 min)", "train", true),
+          blk("7:30 – 7:45 PM", "Team training (~90 min)", "train", true),
           blk("By 9:30 PM", "Home", "train"),
           blk("9:30 – 9:33 PM", "Quick rinse", "train"),
           blk("9:33 – 9:38 PM", "Put football stuff away & clean room", "train"),
           blk("9:38 – 9:50 PM", "Dinner", "train"),
-          blk("9:50 – 9:55 PM", "Read bible & pray", "train"),
+          blk("9:50 – 9:55 PM", "Write tomorrow's tasks, read, Bible & pray", "train"),
           blk("9:55 PM", "Bedtime", "bed")
         ]
       },
@@ -668,12 +747,12 @@
           blk("then", "Quick rinse", "train"),
           blk("then", "Put football stuff away & clean room", "train"),
           blk("then", "Dinner", "train"),
-          blk("then", "Read bible & pray", "train"),
+          blk("then", "Write tomorrow's tasks, read, Bible & pray", "train"),
           blk("~9:30 PM (or ASAP after)", "Bedtime", "bed")
         ]
       },
       rest: {
-        badge: "Sunday",
+        badge: "Rest & reset",
         blocks: [
           blk("6:45 – 6:50 AM", "Wake up & get ready", "train"),
           blk("6:50 – 7:00 AM", "Travel to the pitch", "train"),
@@ -683,11 +762,12 @@
           blk("1:30 – 2:30 PM", "Code", "train"),
           blk("2:30 – 3:00 PM", "Laundry", "train"),
           blk("3:00 – 3:30 PM", "Get ready for the week (kit, bag, clothes)", "train"),
+          note("Weekly review, on paper — anchors this week, NHS hours, next adjustment"),
           note("Rest of afternoon — Free time"),
           blk("8:10 – 8:15 PM", "Quick rinse", "train"),
           blk("8:15 – 8:30 PM", "Put football stuff away & clean room", "train"),
           blk("8:30 – 9:15 PM", "Dinner", "train"),
-          blk("9:15 – 9:30 PM", "Read bible & pray", "train"),
+          blk("9:15 – 9:30 PM", "Write tomorrow's tasks, read, Bible & pray", "train"),
           blk("9:30 PM", "Bedtime", "bed")
         ]
       }
@@ -696,18 +776,63 @@
 
   function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
 
+  function defaultDays() {
+    var wm = defaultWeekMap();
+    var d = defaults();
+    var days = {};
+    WEEK_ORDER.forEach(function (day) {
+      var type = wm[day];
+      var entry = clone(d[type]);
+      entry.type = type;
+      days[day] = entry;
+    });
+    return days;
+  }
+
+  function goalLadderDefaults() {
+    return {
+      football: {
+        season:  { goal: "Put up real numbers this season — goals, assists, and key passes — built on a first touch reliable enough to control anything that comes in, however it arrives.", deadline: "End of season", reflection: "", completed: false },
+        monthly: { goal: "Aerial first touch becomes automatic in training.", deadline: "End of this month", reflection: "", completed: false },
+        weekly:  { goal: "One specific touch, one specific body part, worked in balcony sessions.", deadline: "End of this week", reflection: "", completed: false }
+      },
+      gpa: {
+        season:  { goal: "Finish the year with a 4.0 GPA.", deadline: "End of school year (June)", reflection: "", completed: false },
+        monthly: { goal: "Nothing under an A at the next progress report.", deadline: "Next progress report", reflection: "", completed: false },
+        weekly:  { goal: "Turn everything in on time and do well on tests.", deadline: "End of this week", reflection: "", completed: false }
+      },
+      nhs: {
+        season:  { goal: "Log at least 35 NHS volunteer hours.", deadline: "End of school year (June)", reflection: "", completed: false },
+        monthly: { goal: "Log about 4 hours this month (2 events).", deadline: "End of this month", reflection: "", completed: false },
+        weekly:  { goal: "Have one volunteering event booked or done.", deadline: "End of this week", reflection: "", completed: false }
+      },
+      ap: {
+        season:  { goal: "Score a 5 on the AP exam.", deadline: "May AP exam", reflection: "", completed: false },
+        monthly: { goal: "Steady unit review this month.", deadline: "End of this month", reflection: "", completed: false },
+        weekly:  { goal: "One unit's worth of practice questions.", deadline: "End of this week", reflection: "", completed: false }
+      }
+    };
+  }
+
+  function skillFocusDefaults() {
+    var start = dateKey(new Date());
+    return { name: "First Touch", start: start, end: addMonthsToDateStr(start, 3.5), log: [] };
+  }
+
   var state = {
-    active: "school",
-    data: {},
-    weekMap: {}
+    view: "home",
+    activeDay: "mon",
+    days: {},
+    anchorLog: {},
+    skillFocus: null,
+    goalLadder: null,
+    lastToggledAnchor: null
   };
 
-  var saveTimers = {};
-  var statusEl, footerEl, resetAreaEl, sheetContainerEl, tabsEl, dayTitleEl, weekGridEl;
+  var daysSaveTimer = null;
+  var statusEl, footerEl, resetAreaEl, sheetContainerEl, dayTitleEl, weekGridEl, anchorCardEl, backBtnEl;
 
   function setStatus(text) { if (statusEl) statusEl.textContent = text; }
-
-  function storageKey(type) { return "schedule:" + type; }
 
   var storage = {
     get: function (key) {
@@ -728,42 +853,295 @@
     }
   };
 
-  function loadType(type) {
-    return storage.get(storageKey(type)).then(function (res) {
+  function migrateFromOldFormat() {
+    return Promise.all([
+      storage.get("weekMap"),
+      storage.get("schedule:school"),
+      storage.get("schedule:training"),
+      storage.get("schedule:matchday"),
+      storage.get("schedule:rest")
+    ]).then(function (results) {
+      var oldWeekMapRaw = results[0];
+      var oldTypeRaw = { school: results[1], training: results[2], matchday: results[3], rest: results[4] };
+      var anyOldData = oldWeekMapRaw || oldTypeRaw.school || oldTypeRaw.training || oldTypeRaw.matchday || oldTypeRaw.rest;
+      if (!anyOldData) return defaultDays();
+
+      var wm;
+      try { wm = oldWeekMapRaw && oldWeekMapRaw.value ? Object.assign(defaultWeekMap(), JSON.parse(oldWeekMapRaw.value)) : defaultWeekMap(); }
+      catch (e) { wm = defaultWeekMap(); }
+
+      var d = defaults();
+      var days = {};
+      WEEK_ORDER.forEach(function (day) {
+        var type = wm[day];
+        var raw = oldTypeRaw[type];
+        var entry;
+        if (raw && raw.value) {
+          try { entry = JSON.parse(raw.value); } catch (e) { entry = clone(d[type]); }
+        } else {
+          entry = clone(d[type]);
+        }
+        entry.type = type;
+        days[day] = entry;
+      });
+      return days;
+    }).catch(function () { return defaultDays(); });
+  }
+
+  function loadDays() {
+    return storage.get("days").then(function (res) {
       if (res && res.value) {
-        try { return JSON.parse(res.value); } catch (e) { return clone(defaults()[type]); }
+        try { return JSON.parse(res.value); } catch (e) { return migrateFromOldFormat(); }
       }
-      return clone(defaults()[type]);
-    }).catch(function () {
-      return clone(defaults()[type]);
-    });
+      return migrateFromOldFormat();
+    }).catch(function () { return migrateFromOldFormat(); });
   }
 
-  function loadAll() {
-    var d = defaults();
-    var promises = TYPE_ORDER.map(function (type) {
-      return loadType(type).then(function (val) { state.data[type] = val; });
-    });
-    return Promise.all(promises);
-  }
-
-  function loadWeekMap() {
-    return storage.get("weekMap").then(function (res) {
-      if (res && res.value) {
-        try { return Object.assign(defaultWeekMap(), JSON.parse(res.value)); } catch (e) { return defaultWeekMap(); }
-      }
-      return defaultWeekMap();
-    }).catch(function () {
-      return defaultWeekMap();
-    });
-  }
-
-  function saveWeekMap() {
+  function scheduleSaveDays() {
     setStatus("Saving…");
-    storage.set("weekMap", JSON.stringify(state.weekMap)).then(function (res) {
+    clearTimeout(daysSaveTimer);
+    daysSaveTimer = setTimeout(function () { doSaveDays(); }, 700);
+  }
+
+  function doSaveDays() {
+    storage.set("days", JSON.stringify(state.days)).then(function (res) {
       if (res) { setStatus("Saved ✓"); } else { setStatus("Couldn't save — try again"); }
-    }).catch(function () {
-      setStatus("Couldn't save — try again");
+    }).catch(function () { setStatus("Couldn't save — try again"); });
+  }
+
+  function loadAnchorLog() {
+    return storage.get("anchorLog").then(function (res) {
+      if (res && res.value) { try { return JSON.parse(res.value); } catch (e) { return {}; } }
+      return {};
+    }).catch(function () { return {}; });
+  }
+
+  function saveAnchorLog() { storage.set("anchorLog", JSON.stringify(state.anchorLog)).catch(function () {}); }
+
+  function loadSkillFocus() {
+    return storage.get("skillFocus").then(function (res) {
+      if (res && res.value) { try { return JSON.parse(res.value); } catch (e) { return skillFocusDefaults(); } }
+      return skillFocusDefaults();
+    }).catch(function () { return skillFocusDefaults(); });
+  }
+
+  function saveSkillFocus() { storage.set("skillFocus", JSON.stringify(state.skillFocus)).catch(function () {}); }
+
+  function loadGoalLadder() {
+    return storage.get("goalLadder").then(function (res) {
+      if (res && res.value) { try { return JSON.parse(res.value); } catch (e) { return goalLadderDefaults(); } }
+      return goalLadderDefaults();
+    }).catch(function () { return goalLadderDefaults(); });
+  }
+
+  function saveGoalLadder() { storage.set("goalLadder", JSON.stringify(state.goalLadder)).catch(function () {}); }
+
+  function isAnchorDay(entry) {
+    if (!entry) return false;
+    return ANCHORS.every(function (a) { return !!entry[a.id]; });
+  }
+
+  function anchorsDoneCount(entry) {
+    if (!entry) return 0;
+    return ANCHORS.filter(function (a) { return !!entry[a.id]; }).length;
+  }
+
+  function computeStreak() {
+    var streak = 0;
+    var today = new Date();
+    var todayEntry = state.anchorLog[dateKey(today)];
+    if (isAnchorDay(todayEntry)) streak++;
+
+    var cursor = new Date(today);
+    cursor.setDate(cursor.getDate() - 1);
+    while (true) {
+      var entry = state.anchorLog[dateKey(cursor)];
+      if (isAnchorDay(entry)) { streak++; cursor.setDate(cursor.getDate() - 1); }
+      else break;
+    }
+    return streak;
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function renderAnchorCard() {
+    if (!anchorCardEl) return;
+    var todayStr = dateKey(new Date());
+    var entry = state.anchorLog[todayStr] || {};
+    var streak = computeStreak();
+
+    var itemsHtml = ANCHORS.map(function (a) {
+      var checked = !!entry[a.id];
+      var popClass = (checked && state.lastToggledAnchor === a.id) ? " pop" : "";
+      return (
+        '<div class="anchor-item' + (checked ? " done" : "") + '" data-anchor="' + a.id + '">' +
+          '<span class="anchor-checkbox' + (checked ? " checked" : "") + popClass + '">' + (checked ? "✓" : "") + "</span>" +
+          '<span class="anchor-label">' + escapeHtml(a.label) + "</span>" +
+        "</div>"
+      );
+    }).join("");
+    state.lastToggledAnchor = null;
+
+    var historyRowHtml = "";
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date();
+      d.setDate(d.getDate() - i);
+      var e = state.anchorLog[dateKey(d)];
+      var doneCount = anchorsDoneCount(e);
+      var cls = doneCount === ANCHORS.length ? "full" : (doneCount > 0 ? "partial" : "");
+      var isToday = i === 0;
+      var dayLabel = d.toLocaleDateString(undefined, { weekday: "narrow" });
+      historyRowHtml +=
+        '<div class="anchor-history-day' + (isToday ? " is-today" : "") + '">' +
+          '<span class="anchor-history-dot ' + cls + '" title="' + doneCount + " of " + ANCHORS.length + ' anchors"></span>' +
+          '<span class="anchor-history-label">' + escapeHtml(dayLabel) + "</span>" +
+        "</div>";
+    }
+
+    anchorCardEl.innerHTML =
+      '<div class="anchor-card-head">' +
+        '<span class="anchor-title">Today\'s Anchors</span>' +
+        '<span class="anchor-streak-stat"><span class="anchor-streak-num">' + streak + '</span><span class="anchor-streak-label">day streak</span></span>' +
+      "</div>" +
+      '<div class="anchor-list">' + itemsHtml + "</div>" +
+      '<div class="anchor-history">' +
+        '<p class="anchor-history-title">Last 7 Days</p>' +
+        '<div class="anchor-history-row">' + historyRowHtml + "</div>" +
+      "</div>";
+
+    Array.prototype.forEach.call(anchorCardEl.querySelectorAll(".anchor-item"), function (el) {
+      el.addEventListener("click", function () {
+        var id = el.getAttribute("data-anchor");
+        if (!state.anchorLog[todayStr]) state.anchorLog[todayStr] = {};
+        var newVal = !state.anchorLog[todayStr][id];
+        state.anchorLog[todayStr][id] = newVal;
+        state.lastToggledAnchor = newVal ? id : null;
+        saveAnchorLog();
+        renderAnchorCard();
+      });
+    });
+  }
+
+  function renderHome() {
+    var today = new Date();
+    document.getElementById("homeDate").textContent = today.toLocaleDateString(undefined, {
+      weekday: "long", month: "short", day: "numeric"
+    });
+    var type = state.days[todayKey(today)].type;
+    document.getElementById("homeHero").className = "home-hero dt-" + type;
+    document.getElementById("homeDayType").textContent = DAY_META[type].name;
+    renderAnchorCard();
+  }
+
+  function renderSkillView() {
+    var sf = state.skillFocus;
+    var today = dateKey(new Date());
+    var daysLeft = daysBetween(today, sf.end);
+    var daysLeftText = daysLeft > 0
+      ? (daysLeft + (daysLeft === 1 ? " day left in this cycle" : " days left in this cycle"))
+      : "Cycle complete — time for a new focus";
+
+    var logHtml = sf.log.length
+      ? sf.log.slice().reverse().map(function (entry) {
+          return '<div class="skill-log-entry"><span class="skill-log-date">' + escapeHtml(entry.date) +
+            '</span><span>' + escapeHtml(entry.note) + "</span></div>";
+        }).join("")
+      : '<p class="skill-log-empty">No notes yet.</p>';
+
+    var card = document.getElementById("skillCard");
+    card.innerHTML =
+      '<div class="skill-card">' +
+        '<input class="skill-name-input" id="skillNameInput" value="' + escapeHtml(sf.name) + '" placeholder="Current skill focus">' +
+        '<div class="skill-meta-row">' +
+          '<div class="skill-field"><label>Started</label><input type="date" id="skillStartInput" value="' + escapeHtml(sf.start) + '"></div>' +
+          '<div class="skill-field"><label>Ends</label><input type="date" id="skillEndInput" value="' + escapeHtml(sf.end) + '"></div>' +
+        "</div>" +
+        '<p class="skill-days-left">' + daysLeftText + "</p>" +
+        '<div class="skill-log">' +
+          '<p class="anchor-title skill-log-title">Session Notes</p>' +
+          logHtml +
+          '<div class="skill-log-add">' +
+            '<input type="text" id="skillLogInput" placeholder="Add a quick note...">' +
+            '<button class="btn ghost" id="skillLogAddBtn">Add</button>' +
+          "</div>" +
+        "</div>" +
+        '<div class="skill-swap"><button class="btn subtle" id="skillSwapBtn">Start new cycle</button></div>' +
+      "</div>";
+
+    document.getElementById("skillNameInput").addEventListener("input", function (e) {
+      state.skillFocus.name = e.target.value;
+      saveSkillFocus();
+    });
+    document.getElementById("skillStartInput").addEventListener("change", function (e) {
+      state.skillFocus.start = e.target.value;
+      saveSkillFocus();
+      renderSkillView();
+    });
+    document.getElementById("skillEndInput").addEventListener("change", function (e) {
+      state.skillFocus.end = e.target.value;
+      saveSkillFocus();
+      renderSkillView();
+    });
+    document.getElementById("skillLogAddBtn").addEventListener("click", function () {
+      var input = document.getElementById("skillLogInput");
+      var val = input.value.trim();
+      if (!val) return;
+      state.skillFocus.log.push({ date: dateKey(new Date()), note: val });
+      saveSkillFocus();
+      renderSkillView();
+    });
+    document.getElementById("skillSwapBtn").addEventListener("click", function () {
+      var oldName = state.skillFocus.name || "Previous focus";
+      state.skillFocus.log.push({ date: dateKey(new Date()), note: "Wrapped up: " + oldName });
+      var newStart = dateKey(new Date());
+      state.skillFocus.name = "";
+      state.skillFocus.start = newStart;
+      state.skillFocus.end = addMonthsToDateStr(newStart, 3.5);
+      saveSkillFocus();
+      renderSkillView();
+    });
+  }
+
+  function renderGoalsView() {
+    var container = document.getElementById("goalsContainer");
+    var html = GOAL_DOMAINS.map(function (domainId) {
+      var domain = state.goalLadder[domainId];
+      var tiersHtml = GOAL_TIERS.map(function (tierId) {
+        var tier = domain[tierId];
+        return (
+          '<div class="goal-tier" data-domain="' + domainId + '" data-tier="' + tierId + '">' +
+            '<p class="goal-tier-label">' + TIER_LABELS[tierId] + "</p>" +
+            '<textarea class="goal-text" data-field="goal" rows="2" placeholder="What\'s the goal?">' + escapeHtml(tier.goal) + "</textarea>" +
+            '<div class="goal-deadline-row"><label>Deadline</label><input class="goal-deadline-input" data-field="deadline" value="' + escapeHtml(tier.deadline) + '" placeholder="e.g. End of June"></div>' +
+            '<textarea class="goal-reflection" data-field="reflection" rows="2" placeholder="How did it actually go?">' + escapeHtml(tier.reflection) + "</textarea>" +
+            '<label class="goal-complete-row"><input type="checkbox" data-field="completed"' + (tier.completed ? " checked" : "") + "> Completed by the deadline</label>" +
+          "</div>"
+        );
+      }).join("");
+      return (
+        '<div class="goal-domain" data-domain="' + domainId + '">' +
+          '<p class="goal-domain-title">' + DOMAIN_META[domainId].name + "</p>" +
+          tiersHtml +
+        "</div>"
+      );
+    }).join("");
+    container.innerHTML = html;
+
+    Array.prototype.forEach.call(container.querySelectorAll(".goal-tier"), function (tierEl) {
+      var domainId = tierEl.getAttribute("data-domain");
+      var tierId = tierEl.getAttribute("data-tier");
+      Array.prototype.forEach.call(tierEl.querySelectorAll("[data-field]"), function (fieldEl) {
+        var field = fieldEl.getAttribute("data-field");
+        var eventName = field === "completed" ? "change" : "input";
+        fieldEl.addEventListener(eventName, function () {
+          var val = field === "completed" ? fieldEl.checked : fieldEl.value;
+          state.goalLadder[domainId][tierId][field] = val;
+          saveGoalLadder();
+        });
+      });
     });
   }
 
@@ -772,10 +1150,9 @@
     if (!container) return;
 
     var html = WEEK_ORDER.map(function (day) {
-      var type = state.weekMap[day];
+      var d = state.days[day];
+      var type = d.type;
       var meta = DAY_META[type];
-      var d = state.data[type];
-      if (!d) return "";
 
       var kickoffHtml = "";
       if (type === "matchday" && (d.kickoff || d.opponent)) {
@@ -810,52 +1187,14 @@
     container.innerHTML = html;
   }
 
-  function scheduleSave(type) {
-    renderWeekView();
-    setStatus("Saving…");
-    clearTimeout(saveTimers[type]);
-    saveTimers[type] = setTimeout(function () { doSave(type); }, 700);
-  }
-
-  function doSave(type) {
-    var payload = JSON.stringify(state.data[type]);
-    storage.set(storageKey(type), payload).then(function (res) {
-      if (res) { setStatus("Saved ✓"); } else { setStatus("Couldn't save — try again"); }
-    }).catch(function () {
-      setStatus("Couldn't save — try again");
-    });
-  }
-
-  function escapeHtml(s) {
-    return String(s == null ? "" : s)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
-
-  function renderTabs() {
-    var todayType = state.weekMap[todayKey(new Date())];
-    var html = TYPE_ORDER.map(function (type) {
-      var meta = DAY_META[type];
-      var cls = "tab" + (type === state.active ? " active" : "") + (type === todayType ? " today" : "");
-      return '<button class="' + cls + '" data-type="' + type + '" title="' +
-        (type === todayType ? "Today usually looks like this" : "") + '">' + meta.name + "</button>";
-    }).join("");
-    tabsEl.innerHTML = html;
-    Array.prototype.forEach.call(tabsEl.querySelectorAll(".tab"), function (b) {
-      b.addEventListener("click", function () {
-        state.active = b.getAttribute("data-type");
-        renderTabs();
-        renderSheet();
-      });
-    });
-  }
-
   function renderWeek() {
     if (!weekGridEl) return;
     var today = todayKey(new Date());
     var html = WEEK_ORDER.map(function (day) {
-      var type = state.weekMap[day];
+      var type = state.days[day].type;
       var activeStyle = DAYTYPE_TO_STYLE[type];
       var isToday = day === today;
+      var isSelected = day === state.activeDay;
       var dots = ["train", "school", "game", "bed"].map(function (s) {
         var labelMap = { train: "Training", school: "School", game: "Match", bed: "Rest" };
         return '<button class="dot dot-' + s + (s === activeStyle ? " active" : "") +
@@ -863,7 +1202,7 @@
           '" aria-label="' + WEEKDAY_LABELS[day] + ": " + labelMap[s] + '"></button>';
       }).join("");
       return (
-        '<div class="week-tile tint-' + type + (isToday ? " today" : "") + '">' +
+        '<div class="week-tile tint-' + type + (isToday ? " today" : "") + (isSelected ? " selected" : "") + '">' +
           '<button class="week-day-btn" data-jump="' + day + '">' + WEEKDAY_LABELS[day] + "</button>" +
           '<div class="week-dots" role="group" aria-label="' + WEEKDAY_LABELS[day] + ' type">' + dots + "</div>" +
           '<span class="week-type-label c-' + type + '">' + SHORT_NAME[type] + "</span>" +
@@ -879,17 +1218,16 @@
       dotEl.addEventListener("click", function () {
         var day = dotEl.getAttribute("data-day");
         var style = dotEl.getAttribute("data-style");
-        state.weekMap[day] = STYLE_TO_DAYTYPE[style];
+        state.days[day].type = STYLE_TO_DAYTYPE[style];
         renderWeek();
-        renderTabs();
-        renderWeekView();
-        saveWeekMap();
+        if (day === state.activeDay) renderSheet();
+        scheduleSaveDays();
       });
     });
     Array.prototype.forEach.call(weekGridEl.querySelectorAll("[data-jump]"), function (btn) {
       btn.addEventListener("click", function () {
-        state.active = state.weekMap[btn.getAttribute("data-jump")];
-        renderTabs();
+        state.activeDay = btn.getAttribute("data-jump");
+        renderWeek();
         renderSheet();
       });
     });
@@ -941,7 +1279,7 @@
   }
 
   function renderBlocks() {
-    var day = state.data[state.active];
+    var day = state.days[state.activeDay];
     var container = sheetContainerEl.querySelector("#blocksList");
     if (!container) return;
     container.innerHTML = day.blocks.map(function (item, i) {
@@ -952,7 +1290,7 @@
 
   function bindBlockEvents() {
     var container = sheetContainerEl.querySelector("#blocksList");
-    var day = state.data[state.active];
+    var day = state.days[state.activeDay];
 
     Array.prototype.forEach.call(container.querySelectorAll(".row"), function (rowEl) {
       var idx = parseInt(rowEl.getAttribute("data-index"), 10);
@@ -964,12 +1302,12 @@
             day.blocks[idx].big = inputEl.checked;
             var labelInput = rowEl.querySelector(".label-input");
             if (labelInput) labelInput.classList.toggle("emph", inputEl.checked);
-            scheduleSave(state.active);
+            scheduleSaveDays();
           });
         } else {
           inputEl.addEventListener("input", function () {
             day.blocks[idx][field] = inputEl.value;
-            scheduleSave(state.active);
+            scheduleSaveDays();
           });
         }
       });
@@ -978,7 +1316,7 @@
         dotEl.addEventListener("click", function () {
           day.blocks[idx].style = dotEl.getAttribute("data-style");
           renderBlocks();
-          scheduleSave(state.active);
+          scheduleSaveDays();
         });
       });
 
@@ -992,7 +1330,7 @@
         day.blocks[idx - 1] = day.blocks[idx];
         day.blocks[idx] = tmp;
         renderBlocks();
-        scheduleSave(state.active);
+        scheduleSaveDays();
       });
 
       if (downBtn) downBtn.addEventListener("click", function () {
@@ -1001,23 +1339,24 @@
         day.blocks[idx + 1] = day.blocks[idx];
         day.blocks[idx] = tmp2;
         renderBlocks();
-        scheduleSave(state.active);
+        scheduleSaveDays();
       });
 
       if (delBtn) delBtn.addEventListener("click", function () {
         day.blocks.splice(idx, 1);
         renderBlocks();
-        scheduleSave(state.active);
+        scheduleSaveDays();
       });
     });
   }
 
   function renderSheet() {
-    var type = state.active;
+    var dayKeyStr = state.activeDay;
+    var day = state.days[dayKeyStr];
+    var type = day.type;
     var meta = DAY_META[type];
-    var day = state.data[type];
 
-    dayTitleEl.textContent = meta.name;
+    dayTitleEl.textContent = WEEKDAY_FULL[dayKeyStr];
 
     var kickoffHtml = "";
     if (type === "matchday") {
@@ -1033,6 +1372,7 @@
     sheetContainerEl.innerHTML =
       '<div class="sheet type-' + type + '">' +
         '<div class="sheet-header">' +
+          '<span class="type-pill dt-' + type + '">' + meta.name + "</span>" +
           '<input class="badge-input" id="badgeInput" value="' + escapeHtml(day.badge || "") + '" aria-label="Day note">' +
         "</div>" +
         kickoffHtml +
@@ -1048,7 +1388,7 @@
     var badgeInput = sheetContainerEl.querySelector("#badgeInput");
     badgeInput.addEventListener("input", function () {
       day.badge = badgeInput.value;
-      scheduleSave(type);
+      scheduleSaveDays();
     });
 
     if (type === "matchday") {
@@ -1056,25 +1396,25 @@
       var opponentInput = sheetContainerEl.querySelector("#opponentInput");
       kickoffInput.addEventListener("input", function () {
         day.kickoff = kickoffInput.value;
-        scheduleSave(type);
+        scheduleSaveDays();
       });
       opponentInput.addEventListener("input", function () {
         day.opponent = opponentInput.value;
-        scheduleSave(type);
+        scheduleSaveDays();
       });
     }
 
     sheetContainerEl.querySelector("#addBlockBtn").addEventListener("click", function () {
       day.blocks.push(blk("", "", "train", false));
       renderBlocks();
-      scheduleSave(type);
+      scheduleSaveDays();
       focusLastLabel();
     });
 
     sheetContainerEl.querySelector("#addNoteBtn").addEventListener("click", function () {
       day.blocks.push(note(""));
       renderBlocks();
-      scheduleSave(type);
+      scheduleSaveDays();
       focusLastLabel();
     });
 
@@ -1094,51 +1434,70 @@
   function renderResetArea() {
     resetAreaEl.innerHTML = '<button class="btn subtle" id="resetBtn">Reset to default</button>';
     resetAreaEl.querySelector("#resetBtn").addEventListener("click", function () {
-      var type = state.active;
+      var dayKeyStr = state.activeDay;
+      var type = state.days[dayKeyStr].type;
       resetAreaEl.innerHTML =
-        '<div class="confirm-box">Reset ' + DAY_META[type].name + ' to its original plan?' +
+        '<div class="confirm-box">Reset ' + WEEKDAY_FULL[dayKeyStr] + " (" + DAY_META[type].name + ') to its default plan?' +
           '<button class="btn danger" id="confirmResetBtn">Yes, reset</button>' +
           '<button class="btn ghost" id="cancelResetBtn">Cancel</button>' +
         "</div>";
       resetAreaEl.querySelector("#confirmResetBtn").addEventListener("click", function () {
-        state.data[type] = clone(defaults()[type]);
+        var fresh = clone(defaults()[type]);
+        fresh.type = type;
+        state.days[dayKeyStr] = fresh;
         renderSheet();
-        scheduleSave(type);
+        scheduleSaveDays();
       });
       resetAreaEl.querySelector("#cancelResetBtn").addEventListener("click", renderResetArea);
     });
   }
 
+  function showView(view) {
+    state.view = view;
+    ["home", "skill", "goals", "week", "saved"].forEach(function (v) {
+      var el = document.getElementById("view-" + v);
+      if (el) el.hidden = (v !== view);
+    });
+    dayTitleEl.textContent = VIEW_META[view].title;
+    backBtnEl.hidden = (view === "home");
+
+    if (view === "home") renderHome();
+    else if (view === "skill") renderSkillView();
+    else if (view === "goals") renderGoalsView();
+    else if (view === "week") { renderWeek(); renderSheet(); }
+    else if (view === "saved") renderWeekView();
+  }
+
   function init() {
-    statusEl = document.getElementById("statusText");
-    footerEl = document.getElementById("appFooter");
     resetAreaEl = document.getElementById("resetArea");
     sheetContainerEl = document.getElementById("sheetContainer");
-    tabsEl = document.getElementById("tabs");
-    dayTitleEl = document.getElementById("dayTitle");
+    dayTitleEl = document.getElementById("pageTitle");
     weekGridEl = document.getElementById("weekGrid");
-
-    document.getElementById("todayDate").textContent = new Date().toLocaleDateString(undefined, {
-      weekday: "long", month: "short", day: "numeric"
-    });
+    anchorCardEl = document.getElementById("anchorCard");
+    statusEl = document.getElementById("statusText");
+    footerEl = document.getElementById("appFooter");
+    backBtnEl = document.getElementById("backBtn");
 
     document.getElementById("printBtn").addEventListener("click", function () { window.print(); });
+    backBtnEl.addEventListener("click", function () { showView("home"); });
+    Array.prototype.forEach.call(document.querySelectorAll(".home-nav-btn"), function (btn) {
+      btn.addEventListener("click", function () { showView(btn.getAttribute("data-view")); });
+    });
 
-    Promise.all([loadAll(), loadWeekMap()]).then(function (results) {
-      state.weekMap = results[1];
-      state.active = state.weekMap[todayKey(new Date())];
-      renderWeek();
-      renderTabs();
-      renderSheet();
-      renderWeekView();
+    Promise.all([loadDays(), loadAnchorLog(), loadSkillFocus(), loadGoalLadder()]).then(function (results) {
+      state.days = results[0];
+      state.anchorLog = results[1];
+      state.skillFocus = results[2];
+      state.goalLadder = results[3];
+      state.activeDay = todayKey(new Date());
+      showView("home");
     }).catch(function () {
-      state.data = defaults();
-      state.weekMap = defaultWeekMap();
-      state.active = state.weekMap[todayKey(new Date())];
-      renderWeek();
-      renderTabs();
-      renderSheet();
-      renderWeekView();
+      state.days = defaultDays();
+      state.anchorLog = {};
+      state.skillFocus = skillFocusDefaults();
+      state.goalLadder = goalLadderDefaults();
+      state.activeDay = todayKey(new Date());
+      showView("home");
       setStatus("Couldn't load saved changes — showing defaults");
     });
   }
