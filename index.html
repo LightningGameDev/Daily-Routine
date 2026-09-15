@@ -110,7 +110,7 @@
 
   /* Home nav */
   .home-nav { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
-  .home-nav-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .home-nav-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
   .home-nav-btn {
     display: flex;
@@ -146,6 +146,7 @@
   .home-nav-btn.nav-skill { border-left-color: var(--pitch); }
   .home-nav-btn.nav-goals { border-left-color: var(--gold); }
   .home-nav-btn.nav-week { border-left-color: var(--sky); }
+  .home-nav-btn.nav-homework { border-left-color: var(--sky); }
   .home-nav-btn.nav-saved { border-left-color: rgba(28, 36, 32, 0.4); }
 
   @media (max-width: 480px) { .home-nav-row { grid-template-columns: 1fr; } }
@@ -277,6 +278,42 @@
   }
 
   .goal-complete-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px; color: rgba(28, 36, 32, 0.6); cursor: pointer; }
+
+  /* Homework tracker */
+  .hw-card { background: white; border-radius: 6px; border-left: 6px solid var(--sky); padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
+
+  .hw-add-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; align-items: center; }
+  .hw-add-row input[type="text"] { flex: 2 1 140px; }
+  .hw-add-row input[type="date"] { flex: 1 1 120px; }
+  .hw-add-row input {
+    border: none; border-bottom: 1px solid var(--line); background: transparent; font-size: 13px; padding: 8px 4px;
+  }
+  .hw-add-row input:focus { outline: none; background: rgba(28,36,32,0.03); }
+  .hw-add-row .btn { flex: 0 0 auto; }
+
+  .hw-list { display: flex; flex-direction: column; gap: 0; margin-top: 6px; }
+  .hw-item { display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px solid var(--line); }
+  .hw-item:last-child { border-bottom: none; }
+
+  .hw-check {
+    width: 21px; height: 21px; border-radius: 50%; border: 2px solid var(--line); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 12px; color: white; cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .hw-check.checked { background: var(--sky); border-color: var(--sky); }
+
+  .hw-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .hw-subject {
+    font-family: 'Oswald', Arial, sans-serif; font-size: 10px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--sky);
+  }
+  .hw-title { font-size: 13.5px; }
+  .hw-item.done .hw-title { color: rgba(28, 36, 32, 0.4); text-decoration: line-through; }
+  .hw-item.done .hw-subject { color: rgba(28, 36, 32, 0.35); }
+
+  .hw-due { font-family: 'Oswald', Arial, sans-serif; font-size: 11.5px; font-weight: 600; color: rgba(28, 36, 32, 0.5); white-space: nowrap; }
+  .hw-item.overdue .hw-due { color: #b23b3b; }
+  .hw-empty { font-size: 12.5px; color: rgba(28, 36, 32, 0.45); padding: 10px 2px; }
 
   /* Sheet */
   .sheet { background: white; border-top: 8px solid var(--pitch); border-radius: 4px; padding: 22px 20px 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
@@ -478,6 +515,7 @@
     .week-type-label { font-size: 9px; }
     .sheet-header { align-items: flex-start; }
     .badge-input { max-width: none; text-align: left; }
+    .hw-due { order: 10; margin-left: 33px; }
   }
 
   @media print {
@@ -553,6 +591,15 @@
             </span>
             <span class="hn-text"><span class="hn-title">Goal Ladder</span></span>
           </button>
+          <button class="home-nav-btn secondary nav-homework" data-view="homework">
+            <span class="hn-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"></path>
+                <path d="M14 6l3 3"></path>
+              </svg>
+            </span>
+            <span class="hn-text"><span class="hn-title">Homework</span></span>
+          </button>
           <button class="home-nav-btn secondary nav-saved" data-view="saved">
             <span class="hn-icon">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
@@ -578,6 +625,33 @@
     <!-- GOAL LADDER -->
     <section class="view" id="view-goals" hidden>
       <div id="goalsContainer"></div>
+    </section>
+
+    <!-- HOMEWORK -->
+    <section class="view" id="view-homework" hidden>
+      <div class="hw-card">
+        <p class="goal-domain-title">Add Assignment</p>
+        <div class="hw-add-row">
+          <input type="text" id="hwSubjectInput" list="hwSubjectList" placeholder="Subject">
+          <input type="text" id="hwTitleInput" placeholder="Assignment">
+          <input type="date" id="hwDueInput">
+          <button class="btn ghost" id="hwAddBtn">Add</button>
+        </div>
+        <datalist id="hwSubjectList">
+          <option value="Italian II">
+          <option value="Literature II">
+          <option value="Writing II">
+          <option value="Game Design">
+          <option value="Algebra II">
+          <option value="Health and Fitness">
+          <option value="Human Anatomy and Physiology">
+          <option value="AP Modern World History">
+        </datalist>
+      </div>
+      <div class="hw-card">
+        <p class="goal-domain-title">Assignments</p>
+        <div class="hw-list" id="hwList"></div>
+      </div>
     </section>
 
     <!-- THIS WEEK + WEEK EDITOR -->
@@ -647,6 +721,7 @@
     home: { title: "Home" },
     skill: { title: "Skill Focus" },
     goals: { title: "Goal Ladder" },
+    homework: { title: "Homework" },
     week: { title: "This Week" },
     saved: { title: "Saved Week" }
   };
@@ -826,6 +901,7 @@
     anchorLog: {},
     skillFocus: null,
     goalLadder: null,
+    homework: [],
     lastToggledAnchor: null
   };
 
@@ -935,6 +1011,20 @@
   }
 
   function saveGoalLadder() { storage.set("goalLadder", JSON.stringify(state.goalLadder)).catch(function () {}); }
+
+  function loadHomework() {
+    return storage.get("homework").then(function (res) {
+      if (res && res.value) { try { return JSON.parse(res.value); } catch (e) { return []; } }
+      return [];
+    }).catch(function () { return []; });
+  }
+
+  function saveHomework() { storage.set("homework", JSON.stringify(state.homework)).catch(function () {}); }
+
+  function formatDueDate(dueStr) {
+    var d = new Date(dueStr + "T00:00:00");
+    return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  }
 
   function isAnchorDay(entry) {
     if (!entry) return false;
@@ -1141,6 +1231,53 @@
           state.goalLadder[domainId][tierId][field] = val;
           saveGoalLadder();
         });
+      });
+    });
+  }
+
+  function renderHomeworkView() {
+    var listEl = document.getElementById("hwList");
+    var todayStr = dateKey(new Date());
+
+    var sorted = state.homework.slice().sort(function (a, b) {
+      if (!!a.completed !== !!b.completed) return a.completed ? 1 : -1;
+      var ad = a.due || "9999-99-99";
+      var bd = b.due || "9999-99-99";
+      return ad < bd ? -1 : (ad > bd ? 1 : 0);
+    });
+
+    if (!sorted.length) {
+      listEl.innerHTML = '<p class="hw-empty">No assignments yet — add one above.</p>';
+    } else {
+      listEl.innerHTML = sorted.map(function (item) {
+        var overdue = !item.completed && item.due && item.due < todayStr;
+        var dueLabel = item.due ? formatDueDate(item.due) : "";
+        return (
+          '<div class="hw-item' + (item.completed ? " done" : "") + (overdue ? " overdue" : "") + '" data-id="' + item.id + '">' +
+            '<span class="hw-check' + (item.completed ? " checked" : "") + '">' + (item.completed ? "✓" : "") + "</span>" +
+            '<div class="hw-info">' +
+              (item.subject ? '<span class="hw-subject">' + escapeHtml(item.subject) + "</span>" : "") +
+              '<span class="hw-title">' + escapeHtml(item.title) + "</span>" +
+            "</div>" +
+            '<span class="hw-due">' + escapeHtml(dueLabel) + "</span>" +
+            '<button class="icon-btn delete-btn" data-action="delete" aria-label="Delete">×</button>' +
+          "</div>"
+        );
+      }).join("");
+    }
+
+    Array.prototype.forEach.call(listEl.querySelectorAll(".hw-item"), function (rowEl) {
+      var id = rowEl.getAttribute("data-id");
+      rowEl.querySelector(".hw-check").addEventListener("click", function () {
+        var item = state.homework.find(function (h) { return h.id === id; });
+        if (item) item.completed = !item.completed;
+        saveHomework();
+        renderHomeworkView();
+      });
+      rowEl.querySelector('[data-action="delete"]').addEventListener("click", function () {
+        state.homework = state.homework.filter(function (h) { return h.id !== id; });
+        saveHomework();
+        renderHomeworkView();
       });
     });
   }
@@ -1454,7 +1591,7 @@
 
   function showView(view) {
     state.view = view;
-    ["home", "skill", "goals", "week", "saved"].forEach(function (v) {
+    ["home", "skill", "goals", "homework", "week", "saved"].forEach(function (v) {
       var el = document.getElementById("view-" + v);
       if (el) el.hidden = (v !== view);
     });
@@ -1464,6 +1601,7 @@
     if (view === "home") renderHome();
     else if (view === "skill") renderSkillView();
     else if (view === "goals") renderGoalsView();
+    else if (view === "homework") renderHomeworkView();
     else if (view === "week") { renderWeek(); renderSheet(); }
     else if (view === "saved") renderWeekView();
   }
@@ -1484,11 +1622,33 @@
       btn.addEventListener("click", function () { showView(btn.getAttribute("data-view")); });
     });
 
-    Promise.all([loadDays(), loadAnchorLog(), loadSkillFocus(), loadGoalLadder()]).then(function (results) {
+    document.getElementById("hwAddBtn").addEventListener("click", function () {
+      var subjectEl = document.getElementById("hwSubjectInput");
+      var titleEl = document.getElementById("hwTitleInput");
+      var dueEl = document.getElementById("hwDueInput");
+      var title = titleEl.value.trim();
+      if (!title) { titleEl.focus(); return; }
+      state.homework.push({
+        id: "hw-" + Date.now() + "-" + Math.floor(Math.random() * 10000),
+        subject: subjectEl.value.trim(),
+        title: title,
+        due: dueEl.value,
+        completed: false
+      });
+      subjectEl.value = "";
+      titleEl.value = "";
+      dueEl.value = "";
+      saveHomework();
+      renderHomeworkView();
+      titleEl.focus();
+    });
+
+    Promise.all([loadDays(), loadAnchorLog(), loadSkillFocus(), loadGoalLadder(), loadHomework()]).then(function (results) {
       state.days = results[0];
       state.anchorLog = results[1];
       state.skillFocus = results[2];
       state.goalLadder = results[3];
+      state.homework = results[4];
       state.activeDay = todayKey(new Date());
       showView("home");
     }).catch(function () {
@@ -1496,6 +1656,7 @@
       state.anchorLog = {};
       state.skillFocus = skillFocusDefaults();
       state.goalLadder = goalLadderDefaults();
+      state.homework = [];
       state.activeDay = todayKey(new Date());
       showView("home");
       setStatus("Couldn't load saved changes — showing defaults");
