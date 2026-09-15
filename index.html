@@ -315,6 +315,17 @@
   .hw-item.overdue .hw-due { color: #b23b3b; }
   .hw-empty { font-size: 12.5px; color: rgba(28, 36, 32, 0.45); padding: 10px 2px; }
 
+  .home-hw-section { margin-top: 18px; }
+
+  .hw-more-btn {
+    display: block; width: 100%; text-align: center; border: none; background: transparent;
+    cursor: pointer; font-family: 'Oswald', Arial, sans-serif; font-size: 11.5px; font-weight: 600;
+    letter-spacing: 0.04em; text-transform: uppercase; color: var(--sky); padding: 10px 4px 2px;
+  }
+  .hw-more-btn:hover { text-decoration: underline; }
+
+  .hw-status-text { font-size: 11.5px; color: rgba(28, 36, 32, 0.4); text-align: right; margin-top: 10px; }
+
   /* Sheet */
   .sheet { background: white; border-top: 8px solid var(--pitch); border-radius: 4px; padding: 22px 20px 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
   .sheet.type-matchday { border-top-color: var(--gold); }
@@ -555,6 +566,11 @@
         <div class="anchor-card" id="anchorCard"></div>
       </section>
 
+      <section class="anchor-section home-hw-section">
+        <p class="eyebrow">Homework</p>
+        <div class="hw-card" id="homeHwCard"></div>
+      </section>
+
       <nav class="home-nav">
         <button class="home-nav-btn primary nav-week" data-view="week">
           <span class="hn-icon">
@@ -647,6 +663,7 @@
           <option value="Human Anatomy and Physiology">
           <option value="AP Modern World History">
         </datalist>
+        <p class="hw-status-text" id="hwStatusText">Autosaves as you go</p>
       </div>
       <div class="hw-card">
         <p class="goal-domain-title">Assignments</p>
@@ -1019,7 +1036,17 @@
     }).catch(function () { return []; });
   }
 
-  function saveHomework() { storage.set("homework", JSON.stringify(state.homework)).catch(function () {}); }
+  function setHwStatus(text) {
+    var el = document.getElementById("hwStatusText");
+    if (el) el.textContent = text;
+  }
+
+  function saveHomework() {
+    setHwStatus("Saving…");
+    storage.set("homework", JSON.stringify(state.homework)).then(function (res) {
+      setHwStatus(res ? "Saved ✓" : "Couldn't save — try again");
+    }).catch(function () { setHwStatus("Couldn't save — try again"); });
+  }
 
   function formatDueDate(dueStr) {
     var d = new Date(dueStr + "T00:00:00");
@@ -1115,6 +1142,57 @@
     });
   }
 
+  function renderHomeHomework() {
+    var container = document.getElementById("homeHwCard");
+    if (!container) return;
+    var todayStr = dateKey(new Date());
+    var pending = state.homework.filter(function (h) { return !h.completed; }).sort(function (a, b) {
+      var ad = a.due || "9999-99-99";
+      var bd = b.due || "9999-99-99";
+      return ad < bd ? -1 : (ad > bd ? 1 : 0);
+    });
+
+    if (!pending.length) {
+      container.innerHTML = '<p class="hw-empty">No homework due — you\'re clear.</p>';
+      return;
+    }
+
+    var shown = pending.slice(0, 3);
+    var rowsHtml = shown.map(function (item) {
+      var overdue = item.due && item.due < todayStr;
+      var dueLabel = item.due ? formatDueDate(item.due) : "";
+      return (
+        '<div class="hw-item' + (overdue ? " overdue" : "") + '" data-id="' + item.id + '">' +
+          '<span class="hw-check"></span>' +
+          '<div class="hw-info">' +
+            (item.subject ? '<span class="hw-subject">' + escapeHtml(item.subject) + "</span>" : "") +
+            '<span class="hw-title">' + escapeHtml(item.title) + "</span>" +
+          "</div>" +
+          '<span class="hw-due">' + escapeHtml(dueLabel) + "</span>" +
+        "</div>"
+      );
+    }).join("");
+
+    var moreHtml = pending.length > 3
+      ? '<button class="hw-more-btn" id="homeHwMoreBtn">+' + (pending.length - 3) + " more</button>"
+      : "";
+
+    container.innerHTML = rowsHtml + moreHtml;
+
+    Array.prototype.forEach.call(container.querySelectorAll(".hw-item"), function (rowEl) {
+      var id = rowEl.getAttribute("data-id");
+      rowEl.querySelector(".hw-check").addEventListener("click", function () {
+        var item = state.homework.find(function (h) { return h.id === id; });
+        if (item) item.completed = true;
+        saveHomework();
+        renderHomeHomework();
+      });
+    });
+
+    var moreBtn = document.getElementById("homeHwMoreBtn");
+    if (moreBtn) moreBtn.addEventListener("click", function () { showView("homework"); });
+  }
+
   function renderHome() {
     var today = new Date();
     document.getElementById("homeDate").textContent = today.toLocaleDateString(undefined, {
@@ -1124,6 +1202,7 @@
     document.getElementById("homeHero").className = "home-hero dt-" + type;
     document.getElementById("homeDayType").textContent = DAY_META[type].name;
     renderAnchorCard();
+    renderHomeHomework();
   }
 
   function renderSkillView() {
